@@ -20,16 +20,16 @@ public class Lex {
 		this.file_manager = new FileManager();
 	}
 	
-	public void analyze() {
+	public Token getTokenFromFile() {
+		Token newToken = null;
 		try {
 			char c;
-			this.currentState = 0;
+			this.currentState = States.INITIAL_STATE;
 			String token = "";
-			Token newToken;
 			boolean continueLoop = true;
 			while (continueLoop) {
 				
-		        if (this.currentState == 0)
+		        if (this.currentState == States.INITIAL_STATE)
 		            for (c = file_manager.get_byte(); Character.isWhitespace(c) && (int) c != FileManager.EOF_MARK; c = file_manager.get_byte());
 		        else
 		            c = file_manager.get_byte();
@@ -56,6 +56,7 @@ public class Lex {
 					case Constants.SEMICOLON:
 					case Constants.COMA:
 						continueLoop = false;
+						this.file_manager.ungetchar(c);
 						break;
 					case Constants.RELATIONAL_OPERATOR:
 					case Constants.NEGATION_OPERATOR:
@@ -65,7 +66,9 @@ public class Lex {
 									          ? Constants.EQUALS_COMPARISON_OPERATOR
 									          : this.currentState;
 							token += c;
+							break;
 						}
+						this.file_manager.ungetchar(c);
 						continueLoop = false;
 						break;
 					case States.BEGIN_LOGIC_AND_STATE:
@@ -74,10 +77,12 @@ public class Lex {
 							currentState = Constants.LOGIC_AND_OPERATOR;
 							break;
 						}
+						this.file_manager.ungetchar(c);
 						continueLoop = false;
 						break;
 					case Constants.LOGIC_AND_OPERATOR:
 						continueLoop = false;
+						this.file_manager.ungetchar(c);
 						break;
 					case States.BEGIN_LOGIC_OR_STATE:
 						if (c == '|') {
@@ -85,9 +90,12 @@ public class Lex {
 							this.currentState = Constants.LOGIC_OR_OPERATOR;
 							break;
 						}
+						this.file_manager.ungetchar(c);
+						continueLoop = false;
 						break;
 					case Constants.LOGIC_OR_OPERATOR:
 						continueLoop = false;
+						this.file_manager.ungetchar(c);
 						break;
 					case States.BEGIN_REAL_NUMBER_STATE:
 						if (Character.isDigit(c)) {
@@ -95,6 +103,7 @@ public class Lex {
 							this.currentState = Constants.REAL_NUMBER;
 							break;
 						}
+						this.file_manager.ungetchar(c);
 						continueLoop = false;
 						break;
 					case Constants.REAL_NUMBER:
@@ -102,6 +111,7 @@ public class Lex {
 							token += c;
 							break;
 						}
+						this.file_manager.ungetchar(c);
 						continueLoop = false;
 						break;
 					case Constants.INTEGER:
@@ -113,6 +123,7 @@ public class Lex {
 							token += c;
 							break;
 						}
+						this.file_manager.ungetchar(c);
 						continueLoop = false;
 						break;
 					case Constants.IDENTIFIER:
@@ -120,6 +131,7 @@ public class Lex {
 							token += c;
 							break ;
 						}
+						this.file_manager.ungetchar(c);
 						continueLoop = false;
 						break;
 					case States.ERROR_STATE:
@@ -130,20 +142,25 @@ public class Lex {
 						continueLoop = false;
 						break;
 				}
-				
-				this.setErrorIfExists();
-				
-				if (this.currentState == States.ERROR_STATE) {
-					this.lexicalError(token);
-				}
-				
-				newToken = new Token(this.currentState, token);
-				
+			}
+			
+			this.setErrorIfExists();
+			
+			if (this.currentState == States.ERROR_STATE) {
+				this.lexicalError(token);
+			}
+			
+			newToken = new Token(this.currentState, token);
+			
+			if (this.currentState == Constants.IDENTIFIER) {
 				this.comprobeAndSetKeyWord(newToken);
 			}
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		return newToken;
 	}
 	
 	private void setStateByToken(char token){

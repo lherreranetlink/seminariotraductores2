@@ -7,7 +7,10 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import lex.Constants;
 import lex.Lex;
+import lex.Token;
+
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -22,6 +25,7 @@ public class MainClass extends JFrame {
 	private JPanel contentPane;
 	private JFrame parent = this;
 	private Lex lexicalAnalyzer;
+	private JLabel lblFileSelected;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -29,9 +33,6 @@ public class MainClass extends JFrame {
 				try {
 					MainClass frame = new MainClass();
 					frame.setVisible(true);
-					
-					Lex lexicalAnalyzer = new Lex();
-					lexicalAnalyzer.analyze();
 					
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -48,6 +49,10 @@ public class MainClass extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
+		lblFileSelected = new JLabel("No file selected");
+		lblFileSelected.setBounds(156, 12, 275, 25);
+		contentPane.add(lblFileSelected);
+		
 		JButton btnNewButton = new JButton("Choose file");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -60,8 +65,12 @@ public class MainClass extends JFrame {
 				if (result == JFileChooser.APPROVE_OPTION) {
 				    File selectedFile = fileChooser.getSelectedFile();
 				    System.out.println("Selected file: " + selectedFile.getAbsolutePath());
+				    lblFileSelected.setText(selectedFile.getAbsolutePath());
 				    lexicalAnalyzer = new Lex(selectedFile.getAbsolutePath());
-				    lexicalAnalyzer.analyze();
+				    Token test;
+				    while ((test = lexicalAnalyzer.getTokenFromFile()).key != Constants.EOF_SIGN)
+				    	System.out.println("Lala: " + test.value);
+				    
 				}
 				} catch (FileNotFoundException ex) {
 					JOptionPane.showMessageDialog(null, "File not found", "Error", JOptionPane.ERROR_MESSAGE);
@@ -70,9 +79,5 @@ public class MainClass extends JFrame {
 		});
 		btnNewButton.setBounds(12, 12, 131, 25);
 		contentPane.add(btnNewButton);
-		
-		JLabel lblFileSelected = new JLabel("No file selected");
-		lblFileSelected.setBounds(156, 12, 164, 25);
-		contentPane.add(lblFileSelected);
 	}
 }
