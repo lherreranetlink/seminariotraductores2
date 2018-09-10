@@ -66,9 +66,7 @@ public class Lex {
 									          ? Constants.EQUALS_COMPARISON_OPERATOR
 									          : this.currentState;
 							token += c;
-							break;
 						}
-						this.file_manager.ungetchar(c);
 						continueLoop = false;
 						break;
 					case States.BEGIN_LOGIC_AND_STATE:
@@ -127,7 +125,7 @@ public class Lex {
 						continueLoop = false;
 						break;
 					case Constants.IDENTIFIER:
-						if (Character.isAlphabetic(c) || c == '_') {
+						if (Character.isLetter(c) || Character.isDigit(c) || c == '_') {
 							token += c;
 							break ;
 						}
@@ -163,13 +161,13 @@ public class Lex {
 		return newToken;
 	}
 	
-	private void setStateByToken(char token){
-		
-		if ((int) token == FileManager.EOF_MARK) {
+	private void setStateByToken(char c){
+		if ((int) c == FileManager.EOF_MARK) {
 			this.currentState = Constants.EOF_SIGN;
+			return;
 		}
 		
-		switch(token){
+		switch(c){
 	    case '+':
 	    case '-':
 	        this.currentState = Constants.ADD_OPERATOR;
@@ -211,9 +209,6 @@ public class Lex {
 	        break;
 	    case ',':
 	    	this.currentState = Constants.COMA;
-	        break;
-	    case '"':
-	    	this.currentState = States.BEGIN_STRING_STATE;
 	        break;
 	    default:
 	    	this.currentState = States.ERROR_STATE;
