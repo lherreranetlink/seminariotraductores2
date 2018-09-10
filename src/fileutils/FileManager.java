@@ -9,7 +9,7 @@ public class FileManager {
 	private String file_name;
 	private FileInputStream input_stream;
 	public static int EOF_MARK = 65535;
-	private static int BUFFSIZ = 50;
+	public static int BUFFSIZ = 50;
 	private int buffpos;
 	private char[] buffer;
 	

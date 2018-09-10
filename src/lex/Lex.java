@@ -11,16 +11,30 @@ public class Lex {
 	
 	private FileManager file_manager;
 	private int currentState;
+	private int buffpos;
+	private Token[] buffer;
 
 	public Lex(String filename) throws FileNotFoundException {
 		this.file_manager = new FileManager(filename);
+		this.buffpos = 0; 
+		this.buffer = new Token[FileManager.BUFFSIZ];
 	}
 	
 	public Lex() {
 		this.file_manager = new FileManager();
+		this.buffpos = 0;
+		this.buffer = new Token[FileManager.BUFFSIZ];
 	}
 	
-	public Token getTokenFromFile() {
+	public Token getNextToken() {
+		return (buffpos >= 0) ? buffer[buffpos--] : this.getTokenFromFile(); 
+	}
+	
+	public void ungetToken(Token token) {
+		this.buffer[++buffpos] = token;
+	}
+	
+	private Token getTokenFromFile() {
 		Token newToken = null;
 		try {
 			char c;
@@ -215,6 +229,7 @@ public class Lex {
 	    }
 	}
 	
+	@SuppressWarnings("unlikely-arg-type")
 	private void comprobeAndSetKeyWord(Token token)
 	{
 		if (token.value.equals("if"))
