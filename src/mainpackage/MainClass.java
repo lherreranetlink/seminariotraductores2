@@ -50,7 +50,7 @@ public class MainClass extends JFrame {
 		contentPane.setLayout(null);
 		
 		lblFileSelected = new JLabel("No file selected");
-		lblFileSelected.setBounds(156, 12, 275, 25);
+		lblFileSelected.setBounds(156, 12, 349, 25);
 		contentPane.add(lblFileSelected);
 		
 		JButton btnNewButton = new JButton("Choose file");
@@ -69,7 +69,7 @@ public class MainClass extends JFrame {
 				    lexicalAnalyzer = new Lex(selectedFile.getAbsolutePath());
 				    Token test;
 				    while ((test = lexicalAnalyzer.getTokenFromFile()).key != Constants.EOF_SIGN)
-				    	System.out.println("Lala: " + test.value);
+				    	System.out.println("Token: " + test.value);
 				    
 				}
 				} catch (FileNotFoundException ex) {

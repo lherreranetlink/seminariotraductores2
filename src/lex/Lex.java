@@ -66,7 +66,8 @@ public class Lex {
 									          ? Constants.EQUALS_COMPARISON_OPERATOR
 									          : this.currentState;
 							token += c;
-						}
+						} else 
+							this.file_manager.ungetchar(c);
 						continueLoop = false;
 						break;
 					case States.BEGIN_LOGIC_AND_STATE:
@@ -144,15 +145,13 @@ public class Lex {
 			
 			this.setErrorIfExists();
 			
-			if (this.currentState == States.ERROR_STATE) {
+			if (this.currentState == States.ERROR_STATE) 
 				this.lexicalError(token);
-			}
 			
 			newToken = new Token(this.currentState, token);
 			
-			if (this.currentState == Constants.IDENTIFIER) {
+			if (this.currentState == Constants.IDENTIFIER) 
 				this.comprobeAndSetKeyWord(newToken);
-			}
 			
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -174,6 +173,7 @@ public class Lex {
 	        break;
 	    case '*':
 	    case '/':
+	    case '%':
 	    	this.currentState = Constants.MULT_OPERATOR;
 	        break;
 	    case '<':
