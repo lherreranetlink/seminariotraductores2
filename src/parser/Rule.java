@@ -7,7 +7,7 @@ public class Rule {
 	
 	public Rule() {}
 	
-	public Rule(int index, String name, int size) {
+	public Rule(int index, int size, String name) {
 		this.index = index;
 		this.name = name;
 		this.size = size;

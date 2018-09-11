@@ -5,7 +5,9 @@ import java.util.ArrayList;
 public class RulesList {
 	private ArrayList<Rule> list;
 	
-	public RulesList() {}
+	public RulesList() {
+		this.list = new ArrayList<Rule>();
+	}
 	
 	public void insertRule(Rule rule) {
 		list.add(rule);
@@ -21,7 +23,7 @@ public class RulesList {
 	}
 	
 	public void insertInitialTransition() {
-		Rule initialRule = new Rule(0, "Initial", 1);
+		Rule initialRule = new Rule(0, 1, "Initial");
 		list.add(initialRule);
 	}
 	

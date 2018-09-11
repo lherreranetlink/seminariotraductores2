@@ -7,9 +7,12 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import parser.Parser;
+
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 
@@ -48,15 +51,20 @@ public class MainClass extends JFrame {
 		JButton btnNewButton = new JButton("Choose file");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JFileChooser fileChooser = new JFileChooser();
-				fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+				try {
+					JFileChooser fileChooser = new JFileChooser();
+					fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
 				
-				int result = fileChooser.showOpenDialog(parent);
+					int result = fileChooser.showOpenDialog(parent);
 				
-				if (result == JFileChooser.APPROVE_OPTION) {
-				    File selectedFile = fileChooser.getSelectedFile();
-				    lblFileSelected.setText(selectedFile.getAbsolutePath());
-				    
+					if (result == JFileChooser.APPROVE_OPTION) {
+						File selectedFile = fileChooser.getSelectedFile();
+						lblFileSelected.setText(selectedFile.getAbsolutePath());
+						Parser parser = new Parser(selectedFile.getAbsolutePath());
+						parser.parse();
+					}
+				} catch (FileNotFoundException e1) {
+					e1.printStackTrace();
 				}
 			}
 		});
