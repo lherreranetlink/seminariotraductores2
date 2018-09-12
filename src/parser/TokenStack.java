@@ -10,7 +10,9 @@ import rules.SyntaxTreeNode;
 public class TokenStack {
 	private Stack<SyntaxTreeNode> stack;
 	
-	public TokenStack() {}
+	public TokenStack() {
+		this.stack = new Stack<SyntaxTreeNode>();
+	}
 	
 	public void push(SyntaxTreeNode data) {
 		stack.push(data);

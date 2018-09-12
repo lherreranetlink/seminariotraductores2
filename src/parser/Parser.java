@@ -9,15 +9,29 @@ import fileutils.FileManager;
 import lex.Constants;
 import lex.Lex;
 import lex.Token;
+import rules.ArgList;
 import rules.Args;
 import rules.Block;
+import rules.BlockStm;
+import rules.BlockStm_1;
 import rules.DefFunc;
 import rules.DefVar;
 import rules.Definition;
 import rules.Definition_1;
 import rules.Definitions;
 import rules.ElsePart;
+import rules.Expression;
+import rules.Expression_1;
+import rules.Expression_2;
+import rules.Expression_3;
+import rules.Expression_4;
+import rules.Expression_5;
+import rules.Expression_6;
+import rules.Expression_7;
+import rules.Expression_8;
+import rules.Expression_9;
 import rules.FuncBlock;
+import rules.FuncCall;
 import rules.LocalVarDef;
 import rules.LocalVarDef_1;
 import rules.LocalVarsDef;
@@ -33,6 +47,11 @@ import rules.Statement_3;
 import rules.Statement_4;
 import rules.Statements;
 import rules.SyntaxTreeNode;
+import rules.Term;
+import rules.Term_1;
+import rules.Term_2;
+import rules.Term_3;
+import rules.Term_4;
 import rules.VarList;
 
 public class Parser {
@@ -103,7 +122,7 @@ public class Parser {
 	}
 	
 	private void buildAndPushSyntaxTreeNode(int rule) {
-		SyntaxTreeNode newNode;
+		SyntaxTreeNode newNode = new SyntaxTreeNode();
 		switch(rule) {
 			case RuleType.PROGRAM:
 				Program program = new Program();
@@ -300,224 +319,182 @@ public class Parser {
 		        args.ruleType = RuleType.ARGS_1;
 		        newNode = args;
 				break;
+			case RuleType.ARG_LIST_1:
+				ArgList argList = new ArgList();
+		        argList.argList = this.tokenStack.pop();
+		        argList.expression = this.tokenStack.pop();
+		        this.tokenStack.pop();
+		        
+		        argList.ruleType = RuleType.ARG_LIST_1;
+		        newNode = argList;
+				break;
+			case RuleType.TERM:
+				Term term = new Term();
+		        term.funcCall = this.tokenStack.pop();
+		        
+		        term.ruleType = RuleType.TERM;
+		        newNode = term;
+				break;
+			case RuleType.TERM_1:
+				Term_1 term_1 = new Term_1();
+		        term_1.identifier = this.tokenStack.pop();
+		        
+		        term_1.ruleType = RuleType.TERM_1;
+		        newNode = term_1;
+				break;
+			case RuleType.TERM_2:
+				Term_2 term_2 = new Term_2();
+		        term_2.integer = this.tokenStack.pop();
+
+		        term_2.ruleType = RuleType.TERM_2;
+		        newNode = term_2;
+				break;
+			case RuleType.TERM_3:
+				Term_3 term_3 = new Term_3();
+		        term_3.realNumber = this.tokenStack.pop();
+		        
+		        term_3.ruleType = RuleType.TERM_3;
+		        newNode = term_3;
+				break;
+			case RuleType.TERM_4:
+				Term_4 term_4 = new Term_4();
+		        term_4.constChar = this.tokenStack.pop();
+		        
+		        term_4.ruleType = RuleType.TERM_4;
+		        newNode = term_4;
+				break;
+			case RuleType.FUNC_CALL:
+				FuncCall funcCall = new FuncCall();
+				this.tokenStack.pop();
+		        funcCall.args = this.tokenStack.pop();
+		        this.tokenStack.pop();
+		        funcCall.identifier = this.tokenStack.pop();
+		        
+		        funcCall.ruleType = RuleType.FUNC_CALL;
+		        newNode = funcCall;
+				break;
+			case RuleType.BLOCK_STM:
+				BlockStm blockStm = new BlockStm();
+		        blockStm.statement = this.tokenStack.pop();
+
+		        blockStm.ruleType = RuleType.BLOCK_STM;
+		        newNode = blockStm;
+				break;
+			case RuleType.BLOCK_STM_1:
+				BlockStm_1 blockStm_1 = new BlockStm_1();
+		        blockStm_1.block = this.tokenStack.pop();
+		        
+		        blockStm_1.ruleType = RuleType.BLOCK_STM_1;
+		        newNode = blockStm_1;
+				break;
+			case RuleType.EXPRESSION:
+				Expression expression = new Expression();
+				this.tokenStack.pop();
+		        expression.expression = this.tokenStack.pop();
+		        this.tokenStack.pop();
+		        
+		        expression.ruleType = RuleType.EXPRESSION;
+		        newNode = expression;
+				break;
+			case RuleType.EXPRESSION_1:
+				Expression_1 expression_1 = new Expression_1();
+		        expression_1.expression = this.tokenStack.pop();
+		        expression_1.additionOperator = this.tokenStack.pop();
+
+		        expression_1.ruleType = RuleType.EXPRESSION_1;
+		        newNode = expression_1;
+				break;
+			case RuleType.EXPRESSION_2:
+				Expression_2 expression_2 = new Expression_2();
+		        expression_2.expression = this.tokenStack.pop();
+		        expression_2.notOperator = this.tokenStack.pop();
+
+		        expression_2.ruleType = RuleType.EXPRESSION_2;
+		        newNode = expression_2;
+				break;
+			case RuleType.EXPRESSION_3:
+				Expression_3 expression_3 = new Expression_3();
+		        expression_3.expressionRight = this.tokenStack.pop();
+		        expression_3.multOperator = this.tokenStack.pop();
+		        expression_3.expressionLeft = this.tokenStack.pop();
+
+		        expression_3.ruleType = RuleType.EXPRESSION_3;
+		        newNode = expression_3;
+				break;
+			case RuleType.EXPRESSION_4:
+				Expression_4 expression_4 = new Expression_4();
+		        expression_4.expressionRight = this.tokenStack.pop();
+		        expression_4.additionOperator = this.tokenStack.pop();
+		        expression_4.expressionLeft = this.tokenStack.pop();
+
+		        expression_4.ruleType = RuleType.EXPRESSION_4;
+		        newNode = expression_4;
+				break;
+			case RuleType.EXPRESSION_5:
+				Expression_5 expression_5 = new Expression_5();
+		        expression_5.expressionRight = this.tokenStack.pop();
+		        expression_5.relationalOperator = this.tokenStack.pop();
+		        expression_5.expressionLeft = this.tokenStack.pop();
+		        
+		        expression_5.ruleType = RuleType.EXPRESSION_5;
+		        newNode = expression_5;
+				break;
+			case RuleType.EXPRESSION_6:
+				Expression_6 expression_6 = new Expression_6();
+		        expression_6.expressionRight = this.tokenStack.pop();
+		        expression_6.equalsComparisonOperator = this.tokenStack.pop();
+		        expression_6.expressionLeft = this.tokenStack.pop();
+		        
+		        expression_6.ruleType = RuleType.EXPRESSION_6;
+		        newNode = expression_6;
+				break;
+			case RuleType.EXPRESSION_7:
+				Expression_7 expression_7 = new Expression_7();
+		        expression_7.expressionRight = this.tokenStack.pop();
+		        expression_7.andOperator = this.tokenStack.pop();
+		        expression_7.expressionLeft = this.tokenStack.pop();
+		        
+		        expression_7.ruleType = RuleType.EXPRESSION_7;
+		        newNode = expression_7;
+				break;
+			case RuleType.EXPRESSION_8:
+				Expression_8 expression_8 = new Expression_8();
+		        expression_8.expressionRight = this.tokenStack.pop();
+		        expression_8.orOperator = this.tokenStack.pop();
+		        expression_8.expressionLeft = this.tokenStack.pop();
+		        
+		        expression_8.ruleType = RuleType.EXPRESSION_8;
+		        newNode = expression_8;
+				break;
+			case RuleType.EXPRESSION_9:
+				Expression_9 expression_9 = new Expression_9();
+				expression_9.term = this.tokenStack.pop();
+
+				expression_9.ruleType = RuleType.EXPRESSION_9;
+				newNode = expression_9;
+				break;
+			case RuleType.VAR_LIST:
+		    case RuleType.DEFINITIONS:
+		    case RuleType.PARAMETERS:
+		    case RuleType.PARAMS_LIST:
+		    case RuleType.LOCAL_VARS_DEF:
+		    case RuleType.STATEMENTS:
+		    case RuleType.ELSE_PART:
+		    case RuleType.RETURN_VALUE:
+		    case RuleType.ARGS:
+		    case RuleType.ARG_LIST:
+		    	newNode.ruleType = RuleType.EPSILON_RULE;
 		}
-		/*
-    switch(rule)
-    {
-    case ARG_LIST_1:
-    {
-        ArgList* argList = malloc(sizeof(ArgList));
-        argList->argList = pop(&stackTop);
-        argList->expression = pop(&stackTop);
-        pop(&stackTop);
-
-        node->ruleType = ARG_LIST_1;
-        node->attr.argList = argList;
-    }
-    break;
-    case TERM:
-    {
-        Term* term = malloc(sizeof (Term));
-        term->funcCall = pop(&stackTop);
-
-        node->ruleType = TERM;
-        node->attr.term = term;
-    }
-    break;
-    case TERM_1:
-    {
-        Term_1* term_1 = malloc(sizeof(Term_1));
-        term_1->identifier = pop(&stackTop);
-
-        node->ruleType = TERM_1;
-        node->attr.term_1 = term_1;
-    }
-    break;
-    case TERM_2:
-    {
-        Term_2* term_2 = malloc(sizeof(Term_2));
-        term_2->integer = pop(&stackTop);
-
-        node->ruleType = TERM_2;
-        node->attr.term_2 = term_2;
-    }
-    break;
-    case TERM_3:
-    {
-        Term_3* term_3 = malloc(sizeof(Term_3));
-        term_3->realNumber = pop(&stackTop);
-
-        node->ruleType = TERM_3;
-        node->attr.term_3 = term_3;
-    }
-    break;
-    case TERM_4:
-    {
-        Term_4* term_4 = malloc(sizeof(Term_4));
-        term_4->constChar = pop(&stackTop);
-
-        node->ruleType = TERM_4;
-        node->attr.term_4 = term_4;
-    }
-    break;
-    case FUNC_CALL:
-    {
-        FuncCall* funcCall = malloc(sizeof(FuncCall));
-        pop(&stackTop);
-        funcCall->args = pop(&stackTop);
-        pop(&stackTop);
-        funcCall->identifier = pop(&stackTop);
-
-        node->ruleType = FUNC_CALL;
-        node->attr.funcCall = funcCall;
-    }
-    break;
-    case BLOCK_STM:
-    {
-        BlockStm* blockStm = malloc(sizeof(BlockStm));
-        blockStm->statement = pop(&stackTop);
-
-        node->ruleType = BLOCK_STM;
-        node->attr.blockStm = blockStm;
-    }
-    break;
-    case BLOCK_STM_1:
-    {
-        BlockStm_1* blockStm_1 = malloc(sizeof(BlockStm_1));
-        blockStm_1->block = pop(&stackTop);
-
-        node->ruleType = BLOCK_STM_1;
-        node->attr.blockStm_1 = blockStm_1;
-    }
-    break;
-    case EXPRESSION:
-    {
-        Expression* expression = malloc(sizeof(Expression));
-        pop(&stackTop);
-        expression->expression = pop(&stackTop);
-        pop(&stackTop);
-
-        node->ruleType = EXPRESSION;
-        node->attr.expression = expression;
-    }
-    break;
-    case EXPRESSION_1:
-    {
-        Expression_1* expression_1 = malloc(sizeof(Expression_1));
-        expression_1->expression = pop(&stackTop);
-        expression_1->additionOperator = pop(&stackTop);
-
-        node->ruleType = EXPRESSION_1;
-        node->attr.expression_1 = expression_1;
-    }
-    break;
-    case EXPRESSION_2:
-    {
-        Expression_2* expression_2 = malloc(sizeof(Expression_2));
-        expression_2->expression = pop(&stackTop);
-        expression_2->notOperator = pop(&stackTop);
-
-        node->ruleType = EXPRESSION_2;
-        node->attr.expression_2 = expression_2;
-    }
-    break;
-    case EXPRESSION_3:
-    {
-        Expression_3* expression_3 = malloc(sizeof(Expression_3));
-        expression_3->expressionRight = pop(&stackTop);
-        expression_3->multOperator = pop(&stackTop);
-        expression_3->expressionLeft = pop(&stackTop);
-
-        node->ruleType = EXPRESSION_3;
-        node->attr.expression_3 = expression_3;
-    }
-    break;
-    case EXPRESSION_4:
-    {
-        Expression_4* expression_4 = malloc(sizeof(Expression_4));
-        expression_4->expressionRight = pop(&stackTop);
-        expression_4->additionOperator = pop(&stackTop);
-        expression_4->expressionLeft = pop(&stackTop);
-
-        node->ruleType = EXPRESSION_4;
-        node->attr.expression_4 = expression_4;
-    }
-    break;
-    case EXPRESSION_5:
-    {
-        Expression_5* expression_5 = malloc(sizeof(Expression_5));
-        expression_5->expressionRight = pop(&stackTop);
-        expression_5->relationalOperator = pop(&stackTop);
-        expression_5->expressionLeft = pop(&stackTop);
-
-        node->ruleType = EXPRESSION_5;
-        node->attr.expression_5 = expression_5;
-    }
-    break;
-    case EXPRESSION_6:
-    {
-        Expression_6* expression_6 = malloc(sizeof(Expression_6));
-        expression_6->expressionRight = pop(&stackTop);
-        expression_6->equalsComparisonOperator = pop(&stackTop);
-        expression_6->expressionLeft = pop(&stackTop);
-
-        node->ruleType = EXPRESSION_6;
-        node->attr.expression_6 = expression_6;
-    }
-    break;
-    case EXPRESSION_7:
-    {
-        Expression_7* expression_7 = malloc(sizeof(Expression_7));
-        expression_7->expressionRight = pop(&stackTop);
-        expression_7->andOperator = pop(&stackTop);
-        expression_7->expressionLeft = pop(&stackTop);
-
-        node->ruleType = EXPRESSION_7;
-        node->attr.expression_7 = expression_7;
-    }
-    break;
-    case EXPRESSION_8:
-    {
-        Expression_8* expression_8 = malloc(sizeof(Expression_8));
-        expression_8->expressionRight = pop(&stackTop);
-        expression_8->orOperator = pop(&stackTop);
-        expression_8->expressionLeft = pop(&stackTop);
-
-        node->ruleType = EXPRESSION_8;
-        node->attr.expression_8 = expression_8;
-    }
-    break;
-    case EXPRESSION_9:
-    {
-        Expression_9* expression_9 = malloc(sizeof(Expression_9));
-        expression_9->term = pop(&stackTop);
-
-        node->ruleType = EXPRESSION_9;
-        node->attr.expression_9 = expression_9;
-    }
-    break;
-    case VAR_LIST:
-    case DEFINITIONS:
-    case PARAMETERS:
-    case PARAMS_LIST:
-    case LOCAL_VARS_DEF:
-    case STATEMENTS:
-    case ELSE_PART:
-    case RETURN_VALUE:
-    case ARGS:
-    case ARG_LIST:
-        node->ruleType = EPSILON_RULE;
-    }
-
-    ParserTableCell goToState;
-    Rule* ruleToReduce = getRuleByPosition(&rulesListHeader, rule);
-    goToState = parserTable[gettop(&stackTop)->stateToSee][ruleToReduce->index];
-
-    if (goToState.transitionType == ERROR)
-        syntaxError();
-
-    node->stateToSee = goToState.goTo;
-    push(&stackTop, node);*/
+		
+		Rule ruleToReduce = this.rulesList.getRuleByPosition(rule);
+		ParserTableCell goToState = this.parserTable[this.tokenStack.gettop().stateToSee][ruleToReduce.index];
+		
+		if (goToState.transitionType == Parser.ERROR) {
+			this.SyntaxError();
+		}
+		
+		newNode.stateToSee = goToState.goTo;
+		this.tokenStack.push(newNode);
 	}
 	
 	private void buildGrammar() {
@@ -543,6 +520,8 @@ public class Parser {
 		        rows = Integer.parseInt(parts[0]);
 		        columns = Integer.parseInt(parts[1]);
 			}
+			
+			parserTable = new ParserTableCell[rows][columns];
 			for (int i = 0; i < rows; i++) {
 				String row = this.grammar_file_manager.get_line();
 		        String parts[] = row.split("\t");

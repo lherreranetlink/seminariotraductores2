@@ -16,22 +16,22 @@ public class Lex {
 
 	public Lex(String filename) throws FileNotFoundException {
 		this.file_manager = new FileManager(filename);
-		this.buffpos = 0; 
+		this.buffpos = -1; 
 		this.buffer = new Token[FileManager.BUFFSIZ];
 	}
 	
 	public Lex() {
 		this.file_manager = new FileManager();
-		this.buffpos = 0;
+		this.buffpos = -1;
 		this.buffer = new Token[FileManager.BUFFSIZ];
 	}
 	
 	public Token getNextToken() {
-		return (buffpos >= 0) ? buffer[buffpos--] : this.getTokenFromFile(); 
+		return (this.buffpos >= 0) ? buffer[this.buffpos--] : this.getTokenFromFile(); 
 	}
 	
 	public void ungetToken(Token token) {
-		this.buffer[++buffpos] = token;
+		this.buffer[++this.buffpos] = token;
 	}
 	
 	private Token getTokenFromFile() {
