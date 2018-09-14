@@ -91,11 +91,11 @@ public class Parser {
 		this.buildTransitionTable();
 		this.rulesList.insertInitialTransition();
 		
-		boolean finishParse = true;
+		boolean finishParse = false;
 		this.tokenStack.initializeStack();
 		ParserTableCell currentState;
 		
-		while (finishParse) {
+		while (!finishParse) {
 			this.currentToken = this.lexAnalyxer.getNextToken();
 			currentState = this.parserTable[this.tokenStack.gettop().stateToSee][currentToken.key];
 			
@@ -119,6 +119,7 @@ public class Parser {
 				this.SyntaxError();
 			}
 		}
+		JOptionPane.showMessageDialog(null, "Parsing finish succesfully");
 	}
 	
 	private void buildAndPushSyntaxTreeNode(int rule) {

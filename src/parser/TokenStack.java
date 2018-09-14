@@ -19,7 +19,7 @@ public class TokenStack {
 	}
 	
 	public SyntaxTreeNode gettop() { 
-		return (stack.size() > 0) ? stack.elementAt(0) : null;
+		return (stack.size() > 0) ? stack.lastElement() : null;
 	}
 	
 	public SyntaxTreeNode pop() {

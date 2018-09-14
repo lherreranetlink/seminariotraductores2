@@ -14,7 +14,7 @@ public class RulesList {
 	}
 	
 	public Rule getRuleByPosition(int position) {
-		return list.get(position);
+		return list.get(position - 1);
 	}
 	
 	public int getRuleSize(Rule rule) {

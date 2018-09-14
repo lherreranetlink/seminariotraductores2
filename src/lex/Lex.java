@@ -229,7 +229,6 @@ public class Lex {
 	    }
 	}
 	
-	@SuppressWarnings("unlikely-arg-type")
 	private void comprobeAndSetKeyWord(Token token)
 	{
 		if (token.value.equals("if"))
@@ -238,7 +237,7 @@ public class Lex {
 			token.key = Constants.WHILE_KEYWORD;
 		else if (token.value.equals("else"))
 			token.key = Constants.ELSE_KEYWORD;
-		else if (token.equals("return"))
+		else if (token.value.equals("return"))
 			token.key = Constants.RETURN_KEYWORD;
 		else if (token.value.equals("int") || token.value.equals("float") || token.value.equals("void"))
 			token.key = Constants.DATA_TYPE;
