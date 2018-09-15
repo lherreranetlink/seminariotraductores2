@@ -38,20 +38,19 @@ import rules.LocalVarsDef;
 import rules.ParamList;
 import rules.Params;
 import rules.Program;
-import rules.ReturnValue;
 import rules.SimpleToken;
 import rules.Statement;
 import rules.Statement_1;
 import rules.Statement_2;
 import rules.Statement_3;
 import rules.Statement_4;
+import rules.Statement_5;
+import rules.Statement_6;
 import rules.Statements;
 import rules.SyntaxTreeNode;
 import rules.Term;
 import rules.Term_1;
 import rules.Term_2;
-import rules.Term_3;
-import rules.Term_4;
 import rules.VarList;
 
 public class Parser {
@@ -97,7 +96,10 @@ public class Parser {
 		
 		while (!finishParse) {
 			this.currentToken = this.lexAnalyxer.getNextToken();
-			currentState = this.parserTable[this.tokenStack.gettop().stateToSee][currentToken.key];
+			int lala, lele;
+			currentState = this.parserTable[lala = this.tokenStack.gettop().stateToSee][lele = currentToken.key];
+			System.out.println("Fila: " + lala + " Columna: " + lele);
+			System.out.println("token leido chido: " + this.currentToken.value);
 			
 			int transitionType = currentState.transitionType;
 			switch (transitionType) {
@@ -105,6 +107,7 @@ public class Parser {
 				SimpleToken simpleToken = new SimpleToken(this.currentToken);
 				simpleToken.ruleType = RuleType.SIMPLE_TOKEN;
 				simpleToken.stateToSee = currentState.goTo;
+				System.out.println("Estao chido: " + currentState.goTo);
 				this.tokenStack.push(simpleToken);
 				break;
 			case Parser.REDUCTION:
@@ -274,19 +277,46 @@ public class Parser {
 			case RuleType.STATEMENT_3:
 				Statement_3 statement_3 = new Statement_3();
 				this.tokenStack.pop();
-		        statement_3.returnValue = this.tokenStack.pop();
-		        this.tokenStack.pop();
-		        
-		        statement_3.ruleType = RuleType.STATEMENT_3;
-		        newNode = statement_3;
+				this.tokenStack.pop();
+				statement_3.expression = this.tokenStack.pop();
+				this.tokenStack.pop();
+				this.tokenStack.pop();
+				statement_3.block = this.tokenStack.pop();
+				this.tokenStack.pop();
+				
+				statement_3.ruleType = RuleType.STATEMENT_3;
+				newNode = statement_3;
 				break;
 			case RuleType.STATEMENT_4:
 				Statement_4 statement_4 = new Statement_4();
+				statement_4.blockStatement = this.tokenStack.pop();
+				statement_4.iterationExpression = this.tokenStack.pop();
 				this.tokenStack.pop();
-		        statement_4.funcCall = this.tokenStack.pop();
-
-		        statement_4.ruleType = RuleType.STATEMENT_4;
+				statement_4.conditionExpression = this.tokenStack.pop();
+				this.tokenStack.pop();
+				statement_4.initializationExpression = this.tokenStack.pop();
+				this.tokenStack.pop();
+				statement_4.identifier = this.tokenStack.pop();
+				this.tokenStack.pop();
+				
+				statement_4.ruleType = RuleType.STATEMENT_4;
 		        newNode = statement_4;
+				break;
+			case RuleType.STATEMENT_5:
+				this.tokenStack.pop();
+				Statement_5 statement_5 = new Statement_5();
+				statement_5.expressionToReturn = this.tokenStack.pop();
+				this.tokenStack.pop();
+				
+				statement_5.ruleType = RuleType.STATEMENT_5;
+				newNode = statement_5;
+				break;
+			case RuleType.STATEMENT_6:
+				this.tokenStack.pop();
+				Statement_6 statement_6 = new Statement_6();
+				
+				statement_6.ruleType = RuleType.STATEMENT_6;
+				newNode = statement_6;
 				break;
 			case RuleType.ELSE_PART_1:
 				ElsePart elsePart = new ElsePart();
@@ -304,13 +334,6 @@ public class Parser {
 
 		        block.ruleType = RuleType.BLOCK;
 		        newNode = block;
-				break;
-			case RuleType.RETURN_VALUE_1:
-				ReturnValue returnValue = new ReturnValue();
-		        returnValue.expression = this.tokenStack.pop();
-
-		        returnValue.ruleType = RuleType.RETURN_VALUE_1;
-		        newNode = returnValue;
 				break;
 			case RuleType.ARGS_1:
 				Args args = new Args();
@@ -349,20 +372,6 @@ public class Parser {
 
 		        term_2.ruleType = RuleType.TERM_2;
 		        newNode = term_2;
-				break;
-			case RuleType.TERM_3:
-				Term_3 term_3 = new Term_3();
-		        term_3.realNumber = this.tokenStack.pop();
-		        
-		        term_3.ruleType = RuleType.TERM_3;
-		        newNode = term_3;
-				break;
-			case RuleType.TERM_4:
-				Term_4 term_4 = new Term_4();
-		        term_4.constChar = this.tokenStack.pop();
-		        
-		        term_4.ruleType = RuleType.TERM_4;
-		        newNode = term_4;
 				break;
 			case RuleType.FUNC_CALL:
 				FuncCall funcCall = new FuncCall();
@@ -481,14 +490,15 @@ public class Parser {
 		    case RuleType.LOCAL_VARS_DEF:
 		    case RuleType.STATEMENTS:
 		    case RuleType.ELSE_PART:
-		    case RuleType.RETURN_VALUE:
 		    case RuleType.ARGS:
 		    case RuleType.ARG_LIST:
 		    	newNode.ruleType = RuleType.EPSILON_RULE;
 		}
 		
 		Rule ruleToReduce = this.rulesList.getRuleByPosition(rule);
-		ParserTableCell goToState = this.parserTable[this.tokenStack.gettop().stateToSee][ruleToReduce.index];
+		int a, b;
+		ParserTableCell goToState = this.parserTable[a = this.tokenStack.gettop().stateToSee][b = ruleToReduce.index];
+		System.out.println("Machin: " + a + ", " + b);
 		
 		if (goToState.transitionType == Parser.ERROR) {
 			this.SyntaxError();

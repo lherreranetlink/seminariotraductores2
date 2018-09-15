@@ -68,6 +68,7 @@ public class Lex {
 					case Constants.LEFT_BRACE:
 					case Constants.RIGHT_BRACE:
 					case Constants.SEMICOLON:
+					case Constants.COLON:
 					case Constants.COMA:
 						continueLoop = false;
 						this.file_manager.ungetchar(c);
@@ -110,29 +111,8 @@ public class Lex {
 						continueLoop = false;
 						this.file_manager.ungetchar(c);
 						break;
-					case States.BEGIN_REAL_NUMBER_STATE:
-						if (Character.isDigit(c)) {
-							token += c;
-							this.currentState = Constants.REAL_NUMBER;
-							break;
-						}
-						this.file_manager.ungetchar(c);
-						continueLoop = false;
-						break;
-					case Constants.REAL_NUMBER:
-						if (Character.isDigit(c)) {
-							token += c;
-							break;
-						}
-						this.file_manager.ungetchar(c);
-						continueLoop = false;
-						break;
 					case Constants.INTEGER:
-						if (c == '.') {
-							token += c;
-							this.currentState = States.BEGIN_REAL_NUMBER_STATE;
-							break;
-						} else if (Character.isDigit(c)) {
+						if (Character.isDigit(c)) {
 							token += c;
 							break;
 						}
@@ -221,6 +201,9 @@ public class Lex {
 	    case ';':
 	    	this.currentState = Constants.SEMICOLON;
 	        break;
+	    case ':':
+	    	this.currentState = Constants.COLON;
+	    	break;
 	    case ',':
 	    	this.currentState = Constants.COMA;
 	        break;
@@ -241,13 +224,16 @@ public class Lex {
 			token.key = Constants.RETURN_KEYWORD;
 		else if (token.value.equals("int") || token.value.equals("float") || token.value.equals("void"))
 			token.key = Constants.DATA_TYPE;
+		else if (token.value.equals("do"))
+			token.key = Constants.DO_KEYWORD;
+		else if (token.value.equals("for"))
+			token.key = Constants.FOR_KEYWORD;
 	}
 	
 	private void setErrorIfExists()
 	{
 	    switch(this.currentState)
 	    {
-	    case States.BEGIN_REAL_NUMBER_STATE:
 	    case States.BEGIN_LOGIC_AND_STATE:
 	    case States.BEGIN_LOGIC_OR_STATE:
 	        this.currentState= States.ERROR_STATE;

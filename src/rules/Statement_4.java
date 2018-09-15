@@ -1,5 +1,11 @@
 package rules;
 
 public class Statement_4 extends SyntaxTreeNode{
-	public SyntaxTreeNode funcCall;
+	//For(x;x;x) Node
+	//public SyntaxTreeNode funcCall;
+	public SyntaxTreeNode identifier;
+	public SyntaxTreeNode initializationExpression;
+	public SyntaxTreeNode conditionExpression;
+	public SyntaxTreeNode iterationExpression;
+	public SyntaxTreeNode blockStatement;
 }
