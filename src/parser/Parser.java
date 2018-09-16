@@ -126,6 +126,7 @@ public class Parser {
 	}
 	
 	private void buildAndPushSyntaxTreeNode(int rule) {
+		System.out.print("Regla chida: " + rule);
 		SyntaxTreeNode newNode = new SyntaxTreeNode();
 		switch(rule) {
 			case RuleType.PROGRAM:
@@ -499,6 +500,7 @@ public class Parser {
 		int a, b;
 		ParserTableCell goToState = this.parserTable[a = this.tokenStack.gettop().stateToSee][b = ruleToReduce.index];
 		System.out.println("Machin: " + a + ", " + b);
+		System.out.println("Rule to reduce: " + ruleToReduce.name);
 		
 		if (goToState.transitionType == Parser.ERROR) {
 			this.SyntaxError();
