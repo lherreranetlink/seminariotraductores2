@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
 
 import fileutils.FileManager;
 import lex.Constants;
@@ -56,33 +57,39 @@ import rules.VarList;
 public class Parser {
 	
 	private Lex lexAnalyxer;
+	private JTextArea errorLog;
 	private FileManager grammar_file_manager;
 	private Token currentToken;
 	private ParserTableCell[][] parserTable;
 	private RulesList rulesList;
 	private TokenStack tokenStack;
+	public boolean error;
 	
 	public static final int SHIFT = 0;
 	public static final int REDUCTION = 1;
 	public static final int GO_TO_STATE = 2;
 	public static final int ERROR = 3;
 	
-	public Parser() {
+	public Parser(JTextArea errorLog) {
 		try {
+			this.errorLog = errorLog;
 			this.grammar_file_manager = new FileManager("grammar");
-			this.lexAnalyxer = new Lex();
+			this.lexAnalyxer = new Lex(this.errorLog);
 			this.rulesList = new RulesList();
 			this.tokenStack = new TokenStack();
+			this.error = false;
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public Parser(String input_filename) throws FileNotFoundException {
-		this.lexAnalyxer = new Lex(input_filename);
+	public Parser(String input_filename, JTextArea errorLog) throws FileNotFoundException {
+		this.errorLog = errorLog;
+		this.lexAnalyxer = new Lex(input_filename, this.errorLog);
 		this.grammar_file_manager = new FileManager("grammar");
 		this.rulesList = new RulesList();
 		this.tokenStack = new TokenStack();
+		this.error = false;
 	}
 	
 	public void parse() {
@@ -96,6 +103,12 @@ public class Parser {
 		
 		while (!finishParse) {
 			this.currentToken = this.lexAnalyxer.getNextToken();
+			
+			if (this.lexAnalyxer.error) {
+				finishParse = true;
+				break;
+			}
+			
 			int lala, lele;
 			currentState = this.parserTable[lala = this.tokenStack.gettop().stateToSee][lele = currentToken.key];
 			System.out.println("Fila: " + lala + " Columna: " + lele);
@@ -122,7 +135,12 @@ public class Parser {
 				this.SyntaxError();
 			}
 		}
-		JOptionPane.showMessageDialog(null, "Parsing finish succesfully");
+		
+		if (!this.lexAnalyxer.error && !this.error) {
+			JOptionPane.showMessageDialog(null, "Parsing finish succesfully");
+		}
+		
+		this.lexAnalyxer.close_input_file();
 	}
 	
 	private void buildAndPushSyntaxTreeNode(int rule) {
@@ -557,6 +575,7 @@ public class Parser {
 					parserTable[i][j] = newComponent;
 				}
 			}
+			this.grammar_file_manager.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -564,8 +583,9 @@ public class Parser {
 	}
 	
 	private void SyntaxError() {
-		JOptionPane.showMessageDialog(null, "Syntax Error: Unexpected token: " + this.currentToken.value, "Syntax Error", JOptionPane.ERROR_MESSAGE);
-		System.exit(1);
+		String errors = this.errorLog.getText();
+		this.errorLog.setText(errors + " Syntax Error: Unexpected token: " + this.currentToken.value + "\n");
+		this.error = true;
 	}
 
 }

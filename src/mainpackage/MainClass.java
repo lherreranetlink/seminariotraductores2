@@ -5,16 +5,21 @@ import java.awt.EventQueue;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 
+import fileutils.FileManager;
 import parser.Parser;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
+import java.awt.Font;
+import javax.swing.JTextArea;
 
 public class MainClass extends JFrame {
 	
@@ -22,6 +27,8 @@ public class MainClass extends JFrame {
 	private JPanel contentPane;
 	private JFrame parent = this;
 	private JLabel lblFileSelected;
+	JTextArea txtInput, txtLog;
+	private FileManager file_manager;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -37,15 +44,22 @@ public class MainClass extends JFrame {
 	}
 
 	public MainClass() {
+		
+		txtInput = new JTextArea();
+		txtInput.setEditable(false);
+		txtLog = new JTextArea();
+		txtLog.setEditable(false);
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 541, 455);
+		setBounds(100, 100, 605, 612);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
 		lblFileSelected = new JLabel("No file selected");
-		lblFileSelected.setBounds(156, 12, 349, 25);
+		lblFileSelected.setFont(new Font("UnYetgul", Font.BOLD, 12));
+		lblFileSelected.setBounds(447, 81, 131, 25);
 		contentPane.add(lblFileSelected);
 		
 		JButton btnNewButton = new JButton("Choose file");
@@ -60,7 +74,9 @@ public class MainClass extends JFrame {
 					if (result == JFileChooser.APPROVE_OPTION) {
 						File selectedFile = fileChooser.getSelectedFile();
 						lblFileSelected.setText(selectedFile.getAbsolutePath());
-						Parser parser = new Parser(selectedFile.getAbsolutePath());
+						Parser parser = new Parser(selectedFile.getAbsolutePath(), txtLog);
+						file_manager = new FileManager(selectedFile.getAbsolutePath());
+						showInput();
 						parser.parse();
 					}
 				} catch (FileNotFoundException e1) {
@@ -68,7 +84,39 @@ public class MainClass extends JFrame {
 				}
 			}
 		});
-		btnNewButton.setBounds(12, 12, 131, 25);
+		btnNewButton.setBounds(298, 81, 131, 25);
 		contentPane.add(btnNewButton);
+		
+		JLabel lblInput = new JLabel("Input:");
+		lblInput.setFont(new Font("UnYetgul", Font.BOLD, 18));
+		lblInput.setBounds(31, 74, 115, 36);
+		contentPane.add(lblInput);
+		
+		JLabel lblMessages = new JLabel("Messages:");
+		lblMessages.setFont(new Font("UnYetgul", Font.BOLD, 18));
+		lblMessages.setBounds(37, 383, 155, 30);
+		contentPane.add(lblMessages);
+		
+		JLabel lblNewLabel = new JLabel("El compilador del Roger");
+		lblNewLabel.setFont(new Font("UnYetgul", Font.BOLD, 25));
+		lblNewLabel.setBounds(143, 0, 343, 46);
+		contentPane.add(lblNewLabel);
+		
+		JScrollPane sp = new JScrollPane(txtInput);
+		sp.setBounds(35, 118, 530, 253);
+		contentPane.add(sp);
+		
+		JScrollPane sp_1 = new JScrollPane(txtLog);
+		sp_1.setBounds(47, 425, 518, 134);
+		contentPane.add(sp_1);
+	}
+	
+	private void showInput() {
+		try {
+			String inputContents = file_manager.get_file_contents();
+			txtInput.setText(inputContents);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

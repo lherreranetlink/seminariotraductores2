@@ -36,6 +36,18 @@ public class FileManager {
 		this.buffpos = -1;
 	}
 	
+	public String get_file_contents() throws IOException {
+		
+		String contents = "";
+		String line = "";
+		for (line = this.get_line(); line != null; line = this.get_line()) 
+			contents += line + "\n";
+		
+		this.buffered_reader.close();
+		
+		return contents ;
+	}
+	
 	public char get_byte() throws IOException {
 		return (buffpos >= 0) ? buffer[buffpos--] : (char) this.input_stream.read(); 
 	}
@@ -46,6 +58,10 @@ public class FileManager {
 	
 	public String get_line() throws IOException {
 		return buffered_reader.readLine();
+	}
+	
+	public void close() throws IOException {
+		this.buffered_reader.close();
 	}
 	
 	

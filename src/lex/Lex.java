@@ -3,27 +3,33 @@ package lex;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
 
 import fileutils.FileManager;
 
 public class Lex {
 	
 	private FileManager file_manager;
+	private JTextArea errorLog;
 	private int currentState;
 	private int buffpos;
 	private Token[] buffer;
+	public boolean error;
 
-	public Lex(String filename) throws FileNotFoundException {
+	public Lex(String filename, JTextArea errorLog) throws FileNotFoundException {
+		this.errorLog = errorLog;
 		this.file_manager = new FileManager(filename);
 		this.buffpos = -1; 
 		this.buffer = new Token[FileManager.BUFFSIZ];
+		this.error = false;
 	}
 	
-	public Lex() {
+	public Lex(JTextArea errorLog) {
+		this.errorLog = errorLog;
 		this.file_manager = new FileManager();
 		this.buffpos = -1;
 		this.buffer = new Token[FileManager.BUFFSIZ];
+		this.error = false;
 	}
 	
 	public Token getNextToken() {
@@ -139,8 +145,9 @@ public class Lex {
 			
 			this.setErrorIfExists();
 			
-			if (this.currentState == States.ERROR_STATE) 
+			if (this.currentState == States.ERROR_STATE) {
 				this.lexicalError(token);
+			}
 			
 			newToken = new Token(this.currentState, token);
 			
@@ -230,6 +237,14 @@ public class Lex {
 			token.key = Constants.FOR_KEYWORD;
 	}
 	
+	public void close_input_file() {
+		try {
+			this.file_manager.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	private void setErrorIfExists()
 	{
 	    switch(this.currentState)
@@ -240,10 +255,11 @@ public class Lex {
 	    }
 	}
 	
-	private void lexicalError(String invalidSymbol)
+	public void lexicalError(String invalidSymbol)
 	{
-		JOptionPane.showMessageDialog(null, "Invalid symbol " + invalidSymbol, "Lexical Error", JOptionPane.ERROR_MESSAGE);
-		System.exit(1);
+		String errors = this.errorLog.getText();
+		this.errorLog.setText(errors + "Lexical Error: " + invalidSymbol + " invalid token\n");
+		this.error = true;
 	}
 	
 	
