@@ -1,15 +1,11 @@
 int b () {
+while (1) {
+	if (3 == 5)
+		rt = dewre * std;
+}
 
-do {
-
-	df = 3
-for a = 5: a <= 5: a * 2 
-	if (a != 3)
-	  a = 5;
-
-}while(3);
-a = 3;
-
+int c;
+int b, c, f, r;
 if (a == 3) {
 
 a = 45;

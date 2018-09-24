@@ -144,7 +144,7 @@ public class Parser {
 	}
 	
 	private void buildAndPushSyntaxTreeNode(int rule) {
-		System.out.print("Regla chida: " + rule);
+		System.out.println("Regla chida: " + rule);
 		SyntaxTreeNode newNode = new SyntaxTreeNode();
 		switch(rule) {
 			case RuleType.PROGRAM:
