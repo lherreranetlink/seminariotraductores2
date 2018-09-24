@@ -3,24 +3,44 @@ package lex;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
 
 import fileutils.FileManager;
 
 public class Lex {
 	
 	private FileManager file_manager;
+	private JTextArea errorLog;
 	private int currentState;
+	private int buffpos;
+	private Token[] buffer;
+	public boolean error;
 
-	public Lex(String filename) throws FileNotFoundException {
+	public Lex(String filename, JTextArea errorLog) throws FileNotFoundException {
+		this.errorLog = errorLog;
 		this.file_manager = new FileManager(filename);
+		this.buffpos = -1; 
+		this.buffer = new Token[FileManager.BUFFSIZ];
+		this.error = false;
 	}
 	
-	public Lex() {
+	public Lex(JTextArea errorLog) {
+		this.errorLog = errorLog;
 		this.file_manager = new FileManager();
+		this.buffpos = -1;
+		this.buffer = new Token[FileManager.BUFFSIZ];
+		this.error = false;
 	}
 	
-	public Token getTokenFromFile() {
+	public Token getNextToken() {
+		return (this.buffpos >= 0) ? buffer[this.buffpos--] : this.getTokenFromFile(); 
+	}
+	
+	public void ungetToken(Token token) {
+		this.buffer[++this.buffpos] = token;
+	}
+	
+	private Token getTokenFromFile() {
 		Token newToken = null;
 		try {
 			char c;
@@ -54,6 +74,7 @@ public class Lex {
 					case Constants.LEFT_BRACE:
 					case Constants.RIGHT_BRACE:
 					case Constants.SEMICOLON:
+					case Constants.COLON:
 					case Constants.COMA:
 						continueLoop = false;
 						this.file_manager.ungetchar(c);
@@ -96,29 +117,8 @@ public class Lex {
 						continueLoop = false;
 						this.file_manager.ungetchar(c);
 						break;
-					case States.BEGIN_REAL_NUMBER_STATE:
-						if (Character.isDigit(c)) {
-							token += c;
-							this.currentState = Constants.REAL_NUMBER;
-							break;
-						}
-						this.file_manager.ungetchar(c);
-						continueLoop = false;
-						break;
-					case Constants.REAL_NUMBER:
-						if (Character.isDigit(c)) {
-							token += c;
-							break;
-						}
-						this.file_manager.ungetchar(c);
-						continueLoop = false;
-						break;
 					case Constants.INTEGER:
-						if (c == '.') {
-							token += c;
-							this.currentState = States.BEGIN_REAL_NUMBER_STATE;
-							break;
-						} else if (Character.isDigit(c)) {
+						if (Character.isDigit(c)) {
 							token += c;
 							break;
 						}
@@ -145,8 +145,9 @@ public class Lex {
 			
 			this.setErrorIfExists();
 			
-			if (this.currentState == States.ERROR_STATE) 
+			if (this.currentState == States.ERROR_STATE) {
 				this.lexicalError(token);
+			}
 			
 			newToken = new Token(this.currentState, token);
 			
@@ -207,6 +208,9 @@ public class Lex {
 	    case ';':
 	    	this.currentState = Constants.SEMICOLON;
 	        break;
+	    case ':':
+	    	this.currentState = Constants.COLON;
+	    	break;
 	    case ',':
 	    	this.currentState = Constants.COMA;
 	        break;
@@ -223,27 +227,39 @@ public class Lex {
 			token.key = Constants.WHILE_KEYWORD;
 		else if (token.value.equals("else"))
 			token.key = Constants.ELSE_KEYWORD;
-		else if (token.equals("return"))
+		else if (token.value.equals("return"))
 			token.key = Constants.RETURN_KEYWORD;
 		else if (token.value.equals("int") || token.value.equals("float") || token.value.equals("void"))
 			token.key = Constants.DATA_TYPE;
+		else if (token.value.equals("do"))
+			token.key = Constants.DO_KEYWORD;
+		else if (token.value.equals("for"))
+			token.key = Constants.FOR_KEYWORD;
+	}
+	
+	public void close_input_file() {
+		try {
+			this.file_manager.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private void setErrorIfExists()
 	{
 	    switch(this.currentState)
 	    {
-	    case States.BEGIN_REAL_NUMBER_STATE:
 	    case States.BEGIN_LOGIC_AND_STATE:
 	    case States.BEGIN_LOGIC_OR_STATE:
 	        this.currentState= States.ERROR_STATE;
 	    }
 	}
 	
-	private void lexicalError(String invalidSymbol)
+	public void lexicalError(String invalidSymbol)
 	{
-		JOptionPane.showMessageDialog(null, "Invalid symbol " + invalidSymbol, "Lexical Error", JOptionPane.ERROR_MESSAGE);
-		System.exit(1);
+		String errors = this.errorLog.getText();
+		this.errorLog.setText(errors + "Lexical Error: " + invalidSymbol + " invalid token\n");
+		this.error = true;
 	}
 	
 	
