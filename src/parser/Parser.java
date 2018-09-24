@@ -109,18 +109,13 @@ public class Parser {
 				break;
 			}
 			
-			int lala, lele;
-			currentState = this.parserTable[lala = this.tokenStack.gettop().stateToSee][lele = currentToken.key];
-			System.out.println("Fila: " + lala + " Columna: " + lele);
-			System.out.println("token leido chido: " + this.currentToken.value);
-			
+			currentState = this.parserTable[this.tokenStack.gettop().stateToSee][currentToken.key];
 			int transitionType = currentState.transitionType;
 			switch (transitionType) {
 			case Parser.SHIFT:
 				SimpleToken simpleToken = new SimpleToken(this.currentToken);
 				simpleToken.ruleType = RuleType.SIMPLE_TOKEN;
 				simpleToken.stateToSee = currentState.goTo;
-				System.out.println("Estao chido: " + currentState.goTo);
 				this.tokenStack.push(simpleToken);
 				break;
 			case Parser.REDUCTION:
@@ -144,7 +139,6 @@ public class Parser {
 	}
 	
 	private void buildAndPushSyntaxTreeNode(int rule) {
-		System.out.println("Regla chida: " + rule);
 		SyntaxTreeNode newNode = new SyntaxTreeNode();
 		switch(rule) {
 			case RuleType.PROGRAM:
@@ -515,10 +509,7 @@ public class Parser {
 		}
 		
 		Rule ruleToReduce = this.rulesList.getRuleByPosition(rule);
-		int a, b;
-		ParserTableCell goToState = this.parserTable[a = this.tokenStack.gettop().stateToSee][b = ruleToReduce.index];
-		System.out.println("Machin: " + a + ", " + b);
-		System.out.println("Rule to reduce: " + ruleToReduce.name);
+		ParserTableCell goToState = this.parserTable[this.tokenStack.gettop().stateToSee][ruleToReduce.index];
 		
 		if (goToState.transitionType == Parser.ERROR) {
 			this.SyntaxError();
