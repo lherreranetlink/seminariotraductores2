@@ -1,6 +1,5 @@
 package parser;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import javax.swing.JOptionPane;
@@ -53,6 +52,7 @@ import rules.Term;
 import rules.Term_1;
 import rules.Term_2;
 import rules.VarList;
+import treebuilder.SyntaxTreeBuilder;
 
 public class Parser {
 	
@@ -78,12 +78,12 @@ public class Parser {
 			this.rulesList = new RulesList();
 			this.tokenStack = new TokenStack();
 			this.error = false;
-		} catch (FileNotFoundException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public Parser(String input_filename, JTextArea errorLog) throws FileNotFoundException {
+	public Parser(String input_filename, JTextArea errorLog) throws IOException {
 		this.errorLog = errorLog;
 		this.lexAnalyxer = new Lex(input_filename, this.errorLog);
 		this.grammar_file_manager = new FileManager("grammar");
@@ -92,7 +92,7 @@ public class Parser {
 		this.error = false;
 	}
 	
-	public void parse() {
+	public void parse() throws IOException {
 		this.buildGrammar();
 		this.buildTransitionTable();
 		this.rulesList.insertInitialTransition();
@@ -131,9 +131,12 @@ public class Parser {
 			}
 		}
 		
-		if (!this.lexAnalyxer.error && !this.error) {
+		/*if (!this.lexAnalyxer.error && !this.error) {
 			JOptionPane.showMessageDialog(null, "Parsing finish succesfully");
-		}
+		}*/
+		
+		SyntaxTreeBuilder treeBuilder = new SyntaxTreeBuilder((Program) this.tokenStack.pop());
+		treeBuilder.buildSyntaxTree();
 		
 		this.lexAnalyxer.close_input_file();
 	}
