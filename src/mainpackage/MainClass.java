@@ -14,7 +14,6 @@ import parser.Parser;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
@@ -79,7 +78,7 @@ public class MainClass extends JFrame {
 						showInput();
 						parser.parse();
 					}
-				} catch (FileNotFoundException e1) {
+				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
 			}

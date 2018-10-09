@@ -1,6 +1,5 @@
 package lex;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import javax.swing.JTextArea;
@@ -16,7 +15,7 @@ public class Lex {
 	private Token[] buffer;
 	public boolean error;
 
-	public Lex(String filename, JTextArea errorLog) throws FileNotFoundException {
+	public Lex(String filename, JTextArea errorLog) throws IOException {
 		this.errorLog = errorLog;
 		this.file_manager = new FileManager(filename);
 		this.buffpos = -1; 
