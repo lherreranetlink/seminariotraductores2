@@ -52,7 +52,6 @@ import rules.Term;
 import rules.Term_1;
 import rules.Term_2;
 import rules.VarList;
-import treebuilder.SyntaxTreeBuilder;
 
 public class Parser {
 	
@@ -131,12 +130,9 @@ public class Parser {
 			}
 		}
 		
-		/*if (!this.lexAnalyxer.error && !this.error) {
+		if (!this.lexAnalyxer.error && !this.error) {
 			JOptionPane.showMessageDialog(null, "Parsing finish succesfully");
-		}*/
-		
-		SyntaxTreeBuilder treeBuilder = new SyntaxTreeBuilder((Program) this.tokenStack.pop());
-		treeBuilder.buildSyntaxTree();
+		}
 		
 		this.lexAnalyxer.close_input_file();
 	}
