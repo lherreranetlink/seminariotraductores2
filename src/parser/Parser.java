@@ -576,6 +576,7 @@ public class Parser {
 		String errors = this.errorLog.getText();
 		this.errorLog.setText(errors + " Syntax Error: Unexpected token: " + this.currentToken.value + "\n");
 		this.error = true;
+		System.exit(1);
 	}
 
 }

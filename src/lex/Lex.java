@@ -129,6 +129,7 @@ public class Lex {
 							token += c;
 							break;
 						}
+						this.file_manager.ungetchar(c);
 						continueLoop = false;
 						break;
 					case Constants.INTEGER_NUMBER:
@@ -276,16 +277,8 @@ public class Lex {
 	}
 	
 	private void setNumericTokenAsConstant(Token token) {
-		switch(token.key) {
-			case Constants.INTEGER_NUMBER:
-				token.key = Constants.CONSTANT;
-				token.extraAttr = Constants.INTEGER_NUMBER;
-				break;
-			case Constants.REAL_NUMBER:
-				token.key = Constants.CONSTANT;
-				token.extraAttr = Constants.REAL_NUMBER;
-				break;
-		}
+		token.extraAttr = token.key;
+		token.key = Constants.CONSTANT;
 	}
 	
 	public void lexicalError(String invalidSymbol) {
