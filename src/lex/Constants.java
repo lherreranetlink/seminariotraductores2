@@ -2,7 +2,7 @@ package lex;
 
 public class Constants {
 	public static final int IDENTIFIER = 0; 
-	public static final int INTEGER = 1; 
+	public static final int CONSTANT = 1; 
 	public static final int DATA_TYPE = 2; 
 	public static final int ADD_OPERATOR = 3; 
 	public static final int MULT_OPERATOR = 4; 
@@ -26,4 +26,6 @@ public class Constants {
 	public static final int RETURN_KEYWORD = 22;
 	public static final int ELSE_KEYWORD = 23;
 	public static final int EOF_SIGN = 24; 
+	public static final int INTEGER_NUMBER = 25;
+	public static final int REAL_NUMBER = 26;
 }

@@ -57,7 +57,7 @@ public class Lex {
 					case States.INITIAL_STATE:
 						token += c;
 						if (Character.isDigit(c)) {
-							this.currentState = Constants.INTEGER;
+							this.currentState = Constants.INTEGER_NUMBER;
 							break;
 						}
 						if (Character.isLetter(c) || c == '_') {
@@ -116,8 +116,27 @@ public class Lex {
 						continueLoop = false;
 						this.file_manager.ungetchar(c);
 						break;
-					case Constants.INTEGER:
+					case States.BEGIN_REAL_NUMBER_STATE:
 						if (Character.isDigit(c)) {
+							token += c;
+							this.currentState = Constants.REAL_NUMBER;
+							break;
+						}
+						continueLoop = false;
+						break;
+					case Constants.REAL_NUMBER:
+						if (Character.isDigit(c)) {
+							token += c;
+							break;
+						}
+						continueLoop = false;
+						break;
+					case Constants.INTEGER_NUMBER:
+						if (c == '.') {
+							token += c;
+							this.currentState = States.BEGIN_REAL_NUMBER_STATE;
+							break;
+						}else if (Character.isDigit(c)) {
 							token += c;
 							break;
 						}
@@ -150,8 +169,11 @@ public class Lex {
 			
 			newToken = new Token(this.currentState, token);
 			
-			if (this.currentState == Constants.IDENTIFIER) 
+			if (this.currentState == Constants.IDENTIFIER) {
 				this.comprobeAndSetKeyWord(newToken);
+			} else if (this.currentState == Constants.INTEGER_NUMBER || this.currentState == Constants.REAL_NUMBER) {
+				this.setNumericTokenAsConstant(newToken);
+			}
 			
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -244,18 +266,29 @@ public class Lex {
 		}
 	}
 	
-	private void setErrorIfExists()
-	{
-	    switch(this.currentState)
-	    {
+	private void setErrorIfExists() {
+	    switch(this.currentState) {
+	    case States.BEGIN_REAL_NUMBER_STATE:
 	    case States.BEGIN_LOGIC_AND_STATE:
 	    case States.BEGIN_LOGIC_OR_STATE:
 	        this.currentState= States.ERROR_STATE;
 	    }
 	}
 	
-	public void lexicalError(String invalidSymbol)
-	{
+	private void setNumericTokenAsConstant(Token token) {
+		switch(token.key) {
+			case Constants.INTEGER_NUMBER:
+				token.key = Constants.CONSTANT;
+				token.extraAttr = Constants.INTEGER_NUMBER;
+				break;
+			case Constants.REAL_NUMBER:
+				token.key = Constants.CONSTANT;
+				token.extraAttr = Constants.REAL_NUMBER;
+				break;
+		}
+	}
+	
+	public void lexicalError(String invalidSymbol) {
 		String errors = this.errorLog.getText();
 		this.errorLog.setText(errors + "Lexical Error: " + invalidSymbol + " invalid token\n");
 		this.error = true;
