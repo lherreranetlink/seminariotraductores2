@@ -9,6 +9,7 @@ while (1) {
 int c;
 int b, c, f, r;
 if (a == 3) {
+int c;
 c = 2354.5;
 a = 45;
 b = (4567 + 586) + 56 * 58;

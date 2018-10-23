@@ -26,5 +26,17 @@ public class SymbolTable {
 		
 		return false;
 	}
+	
+	public String getType(String identifier, String scope) {
+		Iterator<TableElement> i = this.list.iterator();
+		while (i.hasNext()) {
+			TableElement element = i.next();
+			if (element.identifier.equals(identifier) && element.scope.equals(scope)) {
+				return element.type;
+			}
+		}
+		
+		return "error";
+	}
 
 }

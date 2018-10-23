@@ -380,7 +380,7 @@ public class Parser {
 				break;
 			case RuleType.TERM_2:
 				Term_2 term_2 = new Term_2();
-		        term_2.integer = this.tokenStack.pop();
+		        term_2.constant = this.tokenStack.pop();
 
 		        term_2.ruleType = RuleType.TERM_2;
 		        newNode = term_2;

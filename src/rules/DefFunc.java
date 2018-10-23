@@ -5,4 +5,6 @@ public class DefFunc extends SyntaxTreeNode{
 	public SyntaxTreeNode identifier;
 	public SyntaxTreeNode params;
 	public SyntaxTreeNode blockFunc;
+	
+	public String paramsPattern;
 }
