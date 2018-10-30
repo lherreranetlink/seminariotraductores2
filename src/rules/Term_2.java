@@ -1,6 +1,7 @@
 package rules;
 
 import lex.Constants;
+import semantic.SemanticType;
 
 public class Term_2 extends SyntaxTreeNode {
 	public SyntaxTreeNode constant;
@@ -10,11 +11,11 @@ public class Term_2 extends SyntaxTreeNode {
 	public String getType() {
 		switch (((SimpleToken) this.constant).token.extraAttr) {
 			case Constants.INTEGER_NUMBER:
-				return "int";
+				return SemanticType.INTEGER_TYPE;
 			case Constants.REAL_NUMBER:
-				return "float";
+				return SemanticType.FLOAT_TYPE;
 			default:
-				return "error";
+				return SemanticType.ERROR_TYPE;
 		}
 	}
 }

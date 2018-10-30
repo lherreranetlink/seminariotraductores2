@@ -8,14 +8,14 @@ public class TableElement {
 	
 	public TableElement() {}
 	
-	public TableElement(String identifier, String type, String scope, String paramsPattern) {
+	public TableElement(String type, String identifier, String scope, String paramsPattern) {
 		this.identifier = identifier;
 		this.type = type;
 		this.scope = scope;
 		this.paramsPattern = paramsPattern;
 	}
 	
-	public TableElement(String identifier, String type, String scope) {
+	public TableElement(String type, String identifier, String scope) {
 		this.identifier = identifier;
 		this.type = type;
 		this.scope = scope;

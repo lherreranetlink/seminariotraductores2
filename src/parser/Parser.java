@@ -2,7 +2,6 @@ package parser;
 
 import java.io.IOException;
 
-import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 
 import fileutils.FileManager;
@@ -52,10 +51,12 @@ import rules.Term;
 import rules.Term_1;
 import rules.Term_2;
 import rules.VarList;
+import semantic.SemanticAnalyzer;
 
 public class Parser {
 	
 	private Lex lexAnalyxer;
+	private SemanticAnalyzer semanticAnalyzer;
 	private JTextArea errorLog;
 	private FileManager grammar_file_manager;
 	private Token currentToken;
@@ -130,11 +131,10 @@ public class Parser {
 			}
 		}
 		
-		if (!this.lexAnalyxer.error && !this.error) {
-			JOptionPane.showMessageDialog(null, "Parsing finish succesfully");
-		}
-		
 		this.lexAnalyxer.close_input_file();
+		this.semanticAnalyzer = new SemanticAnalyzer((Program)this.tokenStack.gettop(), this.errorLog);
+		this.semanticAnalyzer.analyzeInput();
+		
 	}
 	
 	private void buildAndPushSyntaxTreeNode(int rule) {

@@ -1,5 +1,41 @@
 package rules;
 
+import parser.RuleType;
+
 public class Expression extends SyntaxTreeNode {
 	public SyntaxTreeNode expression;
+	
+	public Expression() {}
+	
+	public String getType() {
+		this.expression.symbolTableReference = this.symbolTableReference;
+		this.expression.errorLog = this.errorLog;
+		this.expression.scope = this.scope;
+		this.expression.semanticType = this.getExpressionType();
+		this.semanticType = this.expression.semanticType;
+		
+		return this.semanticType;
+	}
+	
+	private String getExpressionType(){
+		switch(this.expression.ruleType) {
+			case RuleType.EXPRESSION:
+				return ((Expression)this.expression).getType();
+			case RuleType.EXPRESSION_1:
+				return ((Expression_1) this.expression).getType();
+			case RuleType.EXPRESSION_2:
+				return ((Expression_2) this.expression).getType();
+			case RuleType.EXPRESSION_3:
+				return ((Expression_3) this.expression).getType();
+			case RuleType.EXPRESSION_4:
+				return ((Expression_4)this.expression).getType();
+			case RuleType.EXPRESSION_5:
+			case RuleType.EXPRESSION_6:
+			case RuleType.EXPRESSION_7:
+			case RuleType.EXPRESSION_8:
+			case RuleType.EXPRESSION_9:
+				return ((Expression_9)expression).getType();
+		}
+		return null;
+	}
 }
