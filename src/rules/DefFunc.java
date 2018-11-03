@@ -45,9 +45,6 @@ public class DefFunc extends SyntaxTreeNode{
 		this.blockFunc.errorLog = this.errorLog;
 		this.blockFunc.scope = this.scope;
     	this.blockFunc.semanticType = ((FuncBlock) blockFunc).getType();
-    	System.out.println(this.identifier.semanticType);
-    	System.out.println(this.params.semanticType);
-    	System.out.println(this.blockFunc.semanticType);
     	this.semanticType = (!this.identifier.semanticType.equals(SemanticType.ERROR_TYPE) 
     			              && !this.params.semanticType.equals(SemanticType.ERROR_TYPE)
     			              && !this.blockFunc.semanticType.equals(SemanticType.ERROR_TYPE))

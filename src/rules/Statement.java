@@ -12,7 +12,7 @@ public class Statement extends SyntaxTreeNode{
 	
 	public String getType() {
 		String assignment_identifier = ((SimpleToken) identifier).token.value;
-		
+
 		if (!this.symbolTableReference.existsSymbol(assignment_identifier, this.scope)) {
 			String errors = this.errorLog.getText();
 			this.errorLog.setText(errors + " Semantic error: Identifier has not been declared: " + assignment_identifier + " in scope: " + this.scope + "\n");
