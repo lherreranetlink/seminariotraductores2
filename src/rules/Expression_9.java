@@ -21,7 +21,7 @@ public class Expression_9 extends SyntaxTreeNode {
 		switch(term.ruleType) {
 			case RuleType.TERM:
 			case RuleType.TERM_1:
-				return ((Term_1)this.term).getType();
+				return ((Term_1) this.term).getType();
 			case RuleType.TERM_2:
 				return ((Term_2) this.term).getType();
 		}

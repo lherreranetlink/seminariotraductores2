@@ -24,7 +24,7 @@ public class LocalVarsDef extends SyntaxTreeNode{
 			this.localVarsDef.semanticType = SemanticType.VOID_TYPE;
 		}
 		
-		this.semanticType = (!this.localVarDef.semanticType.equals(SemanticType.ERROR_TYPE) && this.localVarsDef.semanticType.equals(SemanticType.ERROR_TYPE))
+		this.semanticType = (!this.localVarDef.semanticType.equals(SemanticType.ERROR_TYPE) && !this.localVarsDef.semanticType.equals(SemanticType.ERROR_TYPE))
 			              ? SemanticType.VOID_TYPE
 			              : SemanticType.ERROR_TYPE;
 		

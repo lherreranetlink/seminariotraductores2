@@ -8,13 +8,16 @@ public class Program extends SyntaxTreeNode {
 	public SyntaxTreeNode definitions;
 	
 	public String getType() {
-		this.semanticType = SemanticType.ERROR_TYPE;
 		if (definitions.ruleType != RuleType.EPSILON_RULE) {
 			definitions.errorLog = this.errorLog;
 			definitions.symbolTableReference = this.symbolTableReference;
 			definitions.scope = this.scope;
-			this.semanticType = ((Definitions) definitions).getType(); 
+			this.definitions.semanticType = ((Definitions) definitions).getType(); 
+		} else {
+			this.definitions.semanticType = SemanticType.VOID_TYPE;
 		}
+		
+		this.semanticType = this.definitions.semanticType;
 		
 		return this.semanticType;
 	}

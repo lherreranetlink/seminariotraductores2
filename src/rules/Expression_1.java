@@ -31,9 +31,13 @@ public class Expression_1 extends SyntaxTreeNode {
 			case RuleType.EXPRESSION_4:
 				return ((Expression_4)this.expression).getType();
 			case RuleType.EXPRESSION_5:
+				return ((Expression_5) expression).getType();
 			case RuleType.EXPRESSION_6:
+				return ((Expression_6) expression).getType();
 			case RuleType.EXPRESSION_7:
+				return ((Expression_7) this.expression).getType();
 			case RuleType.EXPRESSION_8:
+				return ((Expression_8) expression).getType();
 			case RuleType.EXPRESSION_9:
 				return ((Expression_9)expression).getType();
 		}

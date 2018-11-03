@@ -19,14 +19,15 @@ public class LocalVarDef_1 extends SyntaxTreeNode{
 	
 	private String getStatementType() {
 		switch(this.statement.ruleType) {
-		case RuleType.STATEMENT:
-			return ((Statement) this.statement).getType();
-		case RuleType.STATEMENT_1:
-		case RuleType.STATEMENT_2:
-		case RuleType.STATEMENT_3:
-		case RuleType.STATEMENT_4:
-		case RuleType.STATEMENT_5:
-		case RuleType.STATEMENT_6:
+			case RuleType.STATEMENT:
+				return ((Statement) this.statement).getType();
+			case RuleType.STATEMENT_1:
+				return ((Statement_1) this.statement).getType();
+			case RuleType.STATEMENT_2:
+			case RuleType.STATEMENT_3:
+			case RuleType.STATEMENT_4:
+			case RuleType.STATEMENT_5:
+			case RuleType.STATEMENT_6:
 		}
 		return null;
 	}

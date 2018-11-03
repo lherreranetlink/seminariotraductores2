@@ -1,6 +1,7 @@
 package rules;
 
 import parser.RuleType;
+import semantic.SemanticType;
 
 public class Definitions extends SyntaxTreeNode{
 	public SyntaxTreeNode definition;
@@ -23,6 +24,10 @@ public class Definitions extends SyntaxTreeNode{
 			this.moreDefinitions.errorLog = this.errorLog;
 			this.moreDefinitions.scope = this.scope;
 			this.moreDefinitions.semanticType = ((Definitions) this.moreDefinitions).getType();
+			this.semanticType = (!this.definition.semanticType.equals(SemanticType.ERROR_TYPE) 
+					             && !this.moreDefinitions.semanticType.equals(SemanticType.ERROR_TYPE))
+					          ? SemanticType.VOID_TYPE
+					          : SemanticType.ERROR_TYPE;
 		} else {
 			this.semanticType = this.definition.semanticType;
 		}
