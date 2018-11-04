@@ -1,11 +1,9 @@
 int d () {
-    int a;
-    if (a <= 1) {
-	a = 45 / 58 * 5;
-	if (a > 3) {
-          a = 90;
-        }
-    } else { 
-
+    int a, b;
+    while (a >= b) {
+	if (3 > 5)
+         while (3 > 5) {
+             b = 5;
+         }
     }
 }
