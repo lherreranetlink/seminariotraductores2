@@ -26,9 +26,13 @@ public class LocalVarDef_1 extends SyntaxTreeNode{
 			case RuleType.STATEMENT_2:
 				return ((Statement_2) this.statement).getType();
 			case RuleType.STATEMENT_3:
+				return ((Statement_3) this.statement).getType();
 			case RuleType.STATEMENT_4:
+				return ((Statement_4) this.statement).getType();
 			case RuleType.STATEMENT_5:
+				return ((Statement_5) this.statement).getType();
 			case RuleType.STATEMENT_6:
+				return ((Statement_6) this.statement).getType();
 		}
 		return null;
 	}

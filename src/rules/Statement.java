@@ -30,7 +30,7 @@ public class Statement extends SyntaxTreeNode{
 			this.semanticType = SemanticType.ERROR_TYPE ;
 		} else if (this.identifier.semanticType == SemanticType.INTEGER_TYPE && this.expression.semanticType == SemanticType.FLOAT_TYPE) {
 			this.semanticType = SemanticType.ERROR_TYPE;
-		} else if (this.identifier.semanticType == SemanticType.ERROR_TYPE && this.expression.semanticType == SemanticType.INTEGER_TYPE) {
+		} else if (this.identifier.semanticType == SemanticType.FLOAT_TYPE && this.expression.semanticType == SemanticType.INTEGER_TYPE) {
 			this.semanticType = SemanticType.ERROR_TYPE;
 		} else {
 			this.semanticType = SemanticType.VOID_TYPE;

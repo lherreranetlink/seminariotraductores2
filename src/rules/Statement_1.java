@@ -20,8 +20,8 @@ public class Statement_1 extends SyntaxTreeNode{
 				                   : SemanticType.VOID_TYPE;
 		
 		this.semanticType = (!this.expression.semanticType.equals(SemanticType.ERROR_TYPE) 
-				             && this.ifPart.semanticType.equals(SemanticType.VOID_TYPE)
-				             && this.elsePart.semanticType.equals(SemanticType.VOID_TYPE))
+				             && !this.ifPart.semanticType.equals(SemanticType.ERROR_TYPE)
+				             && !this.elsePart.semanticType.equals(SemanticType.ERROR_TYPE))
 				          ? SemanticType.VOID_TYPE
 				          : SemanticType.ERROR_TYPE;
 		

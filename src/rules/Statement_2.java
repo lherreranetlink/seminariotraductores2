@@ -15,7 +15,7 @@ public class Statement_2 extends SyntaxTreeNode{
 		this.block.semanticType = ((Block) this.block).getType();
 		
 		this.semanticType = (!this.expression.semanticType.equals(SemanticType.ERROR_TYPE)
-				             && this.block.semanticType.equals(SemanticType.VOID_TYPE))
+				             && !this.block.semanticType.equals(SemanticType.ERROR_TYPE))
 				          ? SemanticType.VOID_TYPE
 		                  : SemanticType.ERROR_TYPE;
 		

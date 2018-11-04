@@ -1,9 +1,6 @@
 int d () {
     int a, b;
-    while (a >= b) {
-	if (3 > 5)
-         while (3 > 5) {
-             b = 5;
-         }
+    for a = 5: a < 10: a + 1 {
+	b = 50;
     }
 }
