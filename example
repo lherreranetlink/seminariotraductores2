@@ -1,6 +1,7 @@
+int b(int a, float, int b) {
+
+}
+
 int d () {
-    int a, b;
-    for a = 5: a < 10: a + 1 {
-	b = 50;
-    }
+    b(1, 3.5, 5);
 }

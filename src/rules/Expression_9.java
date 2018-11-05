@@ -20,6 +20,7 @@ public class Expression_9 extends SyntaxTreeNode {
 	private String getTermType() {
 		switch(term.ruleType) {
 			case RuleType.TERM:
+				return ((Term) this.term).getType();
 			case RuleType.TERM_1:
 				return ((Term_1) this.term).getType();
 			case RuleType.TERM_2:

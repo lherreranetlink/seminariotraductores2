@@ -58,6 +58,36 @@ public class SymbolTable {
 		return SemanticType.ERROR_TYPE;
 	}
 	
+	public String getScopeType(String scopeIdentifier) {
+		Iterator<TableElement> i = this.list.iterator();
+		while (i.hasNext()) {
+			TableElement element = i.next();
+			if (element.identifier.equals(scopeIdentifier) && element.scope.equals("")) {
+				switch (element.type) {
+					case "void":
+						return SemanticType.VOID_TYPE;
+					case "int":
+						return SemanticType.INTEGER_TYPE;
+					case "float":
+						return SemanticType.FLOAT_TYPE;
+				}
+			}
+		}
+		
+		return SemanticType.ERROR_TYPE;
+	}
+	
+	public String getScopeParamsPattern(String scopeIdentifier) {
+		Iterator<TableElement> i = this.list.iterator();
+		while (i.hasNext()) {
+			TableElement element = i.next();
+			if (element.identifier.equals(scopeIdentifier) && element.scope.equals("")) {
+				return element.paramsPattern;
+			}
+		}
+		return null;
+	}
+	
 	public void printSymbolTable() {
 		Iterator<TableElement> i = this.list.iterator();
 		while(i.hasNext()) {
