@@ -110,6 +110,7 @@ public class Parser {
 			}
 			
 			currentState = this.parserTable[this.tokenStack.gettop().stateToSee][currentToken.key];
+			System.out.println("Lala: " + this.tokenStack.gettop().stateToSee + " Lele: " + currentToken.key);
 			int transitionType = currentState.transitionType;
 			switch (transitionType) {
 			case Parser.SHIFT:
@@ -326,6 +327,7 @@ public class Parser {
 			case RuleType.STATEMENT_6:
 				this.tokenStack.pop();
 				Statement_6 statement_6 = new Statement_6();
+				statement_6.funcCall = this.tokenStack.pop();
 				
 				statement_6.ruleType = RuleType.STATEMENT_6;
 				newNode = statement_6;

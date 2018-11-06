@@ -1,7 +1,3 @@
-int b(int a, float, int b) {
-
-}
-
-int d () {
-    b(1, 3.5, 5);
+int b() {
+    d();
 }
