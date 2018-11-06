@@ -110,7 +110,6 @@ public class Parser {
 			}
 			
 			currentState = this.parserTable[this.tokenStack.gettop().stateToSee][currentToken.key];
-			System.out.println("Lala: " + this.tokenStack.gettop().stateToSee + " Lele: " + currentToken.key);
 			int transitionType = currentState.transitionType;
 			switch (transitionType) {
 			case Parser.SHIFT:
