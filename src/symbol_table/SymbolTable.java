@@ -7,6 +7,7 @@ import semantic.SemanticType;
 
 public class SymbolTable {
 	
+	public static final String GLOBAL_SCOPE = "";
 	private ArrayList<TableElement> list;
 	
 	public SymbolTable() {
@@ -81,7 +82,7 @@ public class SymbolTable {
 		Iterator<TableElement> i = this.list.iterator();
 		while (i.hasNext()) {
 			TableElement element = i.next();
-			if (element.identifier.equals(scopeIdentifier) && element.scope.equals("")) {
+			if (element.identifier.equals(scopeIdentifier) && element.scope.equals(SymbolTable.GLOBAL_SCOPE)) {
 				return element.paramsPattern;
 			}
 		}

@@ -2,6 +2,7 @@ package rules;
 
 import parser.RuleType;
 import semantic.SemanticType;
+import symbol_table.SymbolTable;
 
 public class FuncCall extends SyntaxTreeNode {
 	public SyntaxTreeNode identifier;
@@ -11,8 +12,8 @@ public class FuncCall extends SyntaxTreeNode {
 	
 	public String getType() {
 		String func_identifier = ((SimpleToken) identifier).token.value;
-		if (this.symbolTableReference.existsSymbol(func_identifier, this.scope)) {
-			this.identifier.semanticType = this.symbolTableReference.getType(func_identifier, this.scope);
+		if (this.symbolTableReference.existsSymbol(func_identifier, SymbolTable.GLOBAL_SCOPE)) {
+			this.identifier.semanticType = this.symbolTableReference.getType(func_identifier, SymbolTable.GLOBAL_SCOPE);
 		} else {
 			this.identifier.semanticType = SemanticType.ERROR_TYPE;
 			String errors = this.errorLog.getText();
@@ -34,7 +35,7 @@ public class FuncCall extends SyntaxTreeNode {
 		}
 		
 		if (!this.identifier.semanticType.equals(SemanticType.ERROR_TYPE)) {
-			String paramsPatternDefinition = this.symbolTableReference.getScopeParamsPattern(this.scope);
+			String paramsPatternDefinition = this.symbolTableReference.getScopeParamsPattern(func_identifier);
 			if (!this.paramsPattern.equals(paramsPatternDefinition)) {
 				String errors = this.errorLog.getText();
 				this.errorLog.setText(errors + " Semantic error: Arguments passed in: " 

@@ -14,7 +14,7 @@ public class Args extends SyntaxTreeNode{
 		
 		this.expression.semanticType = this.getExpressionType();
 		
-		this.paramsPattern = "";
+		this.paramsPattern += this.expression.semanticType.charAt(0);
 		if (this.argList.ruleType != RuleType.EPSILON_RULE) {
 			this.argList.semanticType = ((ArgList) this.argList).getType();
 			this.paramsPattern += this.argList.paramsPattern;

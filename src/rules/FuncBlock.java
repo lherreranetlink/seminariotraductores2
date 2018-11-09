@@ -11,7 +11,7 @@ public class FuncBlock extends SyntaxTreeNode{
 	public String getType() {
 		if (localVarsDef.ruleType != RuleType.EPSILON_RULE) {
 			this.localVarsDef.errorLog = this.errorLog;
-			this.localVarsDef.symbolTableReference  =this.symbolTableReference;
+			this.localVarsDef.symbolTableReference = this.symbolTableReference;
 			this.localVarsDef.scope = this.scope;
 			this.localVarsDef.semanticType = ((LocalVarsDef)this.localVarsDef).getType();
 		} else {

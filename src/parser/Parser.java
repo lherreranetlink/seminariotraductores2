@@ -132,7 +132,7 @@ public class Parser {
 		}
 		
 		this.lexAnalyxer.close_input_file();
-		this.semanticAnalyzer = new SemanticAnalyzer((Program)this.tokenStack.gettop(), this.errorLog);
+		this.semanticAnalyzer = new SemanticAnalyzer((Program) this.tokenStack.gettop(), this.errorLog);
 		this.semanticAnalyzer.analyzeInput();
 		
 	}
