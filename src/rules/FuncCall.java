@@ -14,12 +14,12 @@ public class FuncCall extends SyntaxTreeNode {
 		String func_identifier = ((SimpleToken) identifier).token.value;
 		if (this.symbolTableReference.existsSymbol(func_identifier, SymbolTable.GLOBAL_SCOPE)) {
 			this.identifier.semanticType = this.symbolTableReference.getType(func_identifier, SymbolTable.GLOBAL_SCOPE);
+		} else if (func_identifier.equals("print")) {
+			this.identifier.semanticType = SemanticType.VOID_TYPE;
 		} else {
 			this.identifier.semanticType = SemanticType.ERROR_TYPE;
-			String errors = this.errorLog.getText();
-			this.errorLog.setText(errors + " Semantic error: function does not exist: " 
-			                             + func_identifier + 
-			                             " in scope: " + this.scope + "\n");
+			this.errorLog.append_content("Semantic error: function does not exist: " + func_identifier + 
+                    " in scope: " + this.scope + "\n");
 		}
 		
 		this.paramsPattern = "";
@@ -34,13 +34,11 @@ public class FuncCall extends SyntaxTreeNode {
 			this.args.semanticType = SemanticType.VOID_TYPE;
 		}
 		
-		if (!this.identifier.semanticType.equals(SemanticType.ERROR_TYPE)) {
+		if (!this.identifier.semanticType.equals(SemanticType.ERROR_TYPE) && !func_identifier.equals("print")) {
 			String paramsPatternDefinition = this.symbolTableReference.getScopeParamsPattern(func_identifier);
 			if (!this.paramsPattern.equals(paramsPatternDefinition)) {
-				String errors = this.errorLog.getText();
-				this.errorLog.setText(errors + " Semantic error: Arguments passed in: " 
-				                             + func_identifier + 
-				                             " does not match with original definition in scope : " + this.scope + "\n");
+				this.errorLog.append_content("Semantic error: Arguments passed in: " + func_identifier + 
+                        " does not match with original definition in scope : " + this.scope + "\n");
 			}
 		}
 		

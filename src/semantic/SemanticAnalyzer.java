@@ -1,16 +1,15 @@
 package semantic;
 
-import javax.swing.JTextArea;
-
+import fileutils.FileManager;
 import rules.Program;
 import symbol_table.SymbolTable;
 
 public class SemanticAnalyzer {
 	private Program program;
 	private SymbolTable symbolTable;
-	private JTextArea errorLog;
+	private FileManager errorLog;
 	
-	public SemanticAnalyzer(Program program, JTextArea errorLog) {
+	public SemanticAnalyzer(Program program, FileManager errorLog) {
 		this.errorLog = errorLog;
 		this.program = program;
 		this.symbolTable = new SymbolTable();

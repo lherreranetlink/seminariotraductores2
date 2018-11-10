@@ -69,8 +69,12 @@ public class FileManager {
 		return contents ;
 	}
 	
-	public void append_content(String contents) throws IOException {
-		this.buffered_writer.append(contents);
+	public void append_content(String contents){
+		try {
+			this.buffered_writer.append(contents);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public char get_byte() throws IOException {

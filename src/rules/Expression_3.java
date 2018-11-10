@@ -26,9 +26,15 @@ public class Expression_3 extends SyntaxTreeNode {
 		if (this.expressionLeft.semanticType == SemanticType.ERROR_TYPE || this.expressionRight.semanticType == SemanticType.ERROR_TYPE) {
 			this.semanticType = SemanticType.ERROR_TYPE;
 		} else if (this.expressionLeft.semanticType == SemanticType.INTEGER_TYPE && this.expressionRight.semanticType == SemanticType.FLOAT_TYPE) {
+			
+			this.errorLog.append_content("Semantic error: operand 1 and operand 2 must have same data type\n");
 			this.semanticType = SemanticType.ERROR_TYPE;
+			
 		} else if (this.expressionLeft.semanticType == SemanticType.FLOAT_TYPE && this.expressionRight.semanticType == SemanticType.INTEGER_TYPE){
+			
+			this.errorLog.append_content("Semantic error: operand 1 and operand 2 must have same data type\n");
 			this.semanticType = SemanticType.ERROR_TYPE;
+			
 		} else if (this.expressionLeft.semanticType == SemanticType.INTEGER_TYPE && this.expressionRight.semanticType == SemanticType.INTEGER_TYPE){
 			this.semanticType = SemanticType.INTEGER_TYPE;
 		} else if (this.expressionLeft.semanticType == SemanticType.FLOAT_TYPE && this.expressionRight.semanticType == SemanticType.FLOAT_TYPE) {

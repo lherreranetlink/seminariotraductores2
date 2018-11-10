@@ -22,11 +22,8 @@ public class DefFunc extends SyntaxTreeNode{
 			this.scope = func_identifier;
 		} else {
 			this.identifier.semanticType = SemanticType.ERROR_TYPE;
-			String errors = this.errorLog.getText();
-			this.errorLog.setText(errors + " Semantic error: function already declared: " 
-			                             + func_identifier + 
+			this.errorLog.append_content(" Semantic error: function already declared: " + func_identifier + 
 			                             " in scope: " + (this.scope.equals("") ? "Global" : this.scope) + "\n");
-			
 			this.identifier.semanticType = SemanticType.ERROR_TYPE;
 		}
 		

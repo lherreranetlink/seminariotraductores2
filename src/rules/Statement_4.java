@@ -19,8 +19,7 @@ public class Statement_4 extends SyntaxTreeNode{
 		String iteration_identifier = ((SimpleToken) identifier).token.value;
 		
 		if (!this.symbolTableReference.existsSymbol(iteration_identifier, this.scope)) {
-			String errors = this.errorLog.getText();
-			this.errorLog.setText(errors + " Semantic error: Identifier has not been declared: " + iteration_identifier + " in scope: " + this.scope + "\n");
+			this.errorLog.append_content("Semantic error: Identifier has not been declared: " + iteration_identifier + " in scope: " + this.scope + "\n");
 			this.identifier.semanticType = SemanticType.ERROR_TYPE;
 		} else {
 			this.identifier.semanticType = this.symbolTableReference.getType(iteration_identifier, this.scope);

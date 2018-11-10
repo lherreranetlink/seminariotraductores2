@@ -2,20 +2,18 @@ package lex;
 
 import java.io.IOException;
 
-import javax.swing.JTextArea;
-
 import fileutils.FileManager;
 
 public class Lex {
 	
 	private FileManager file_manager;
-	private JTextArea errorLog;
+	private FileManager errorLog;
 	private int currentState;
 	private int buffpos;
 	private Token[] buffer;
 	public boolean error;
 
-	public Lex(String filename, JTextArea errorLog) throws IOException {
+	public Lex(String filename, FileManager errorLog) throws IOException {
 		this.errorLog = errorLog;
 		this.file_manager = new FileManager(filename);
 		this.buffpos = -1; 
@@ -23,7 +21,7 @@ public class Lex {
 		this.error = false;
 	}
 	
-	public Lex(JTextArea errorLog) {
+	public Lex(FileManager errorLog) {
 		this.errorLog = errorLog;
 		this.file_manager = new FileManager();
 		this.buffpos = -1;
@@ -282,8 +280,7 @@ public class Lex {
 	}
 	
 	public void lexicalError(String invalidSymbol) {
-		String errors = this.errorLog.getText();
-		this.errorLog.setText(errors + "Lexical Error: " + invalidSymbol + " invalid token\n");
+		this.errorLog.append_content("Lexical Error: " + invalidSymbol + " invalid token\n");
 		this.error = true;
 	}
 	

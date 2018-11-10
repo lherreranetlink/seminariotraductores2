@@ -21,8 +21,7 @@ public class Statement_5 extends SyntaxTreeNode{
 			this.semanticType = this.expressionToReturn.semanticType;
 		} else {
 			this.semanticType = SemanticType.ERROR_TYPE;
-			String errors = this.errorLog.getText();
-			this.errorLog.setText(errors + " Semantic error: return type does not match with type of function previously declared: " 
+			this.errorLog.append_content("Semantic error: return type does not match with type of function previously declared: " 
 			                             + " in scope: " + (this.scope.equals("") ? "Global" : this.scope) + "\n");
 		}
 		

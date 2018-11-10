@@ -14,8 +14,7 @@ public class Statement extends SyntaxTreeNode{
 		String assignment_identifier = ((SimpleToken) identifier).token.value;
 
 		if (!this.symbolTableReference.existsSymbol(assignment_identifier, this.scope)) {
-			String errors = this.errorLog.getText();
-			this.errorLog.setText(errors + " Semantic error: Identifier has not been declared: " + assignment_identifier + " in scope: " + this.scope + "\n");
+			this.errorLog.append_content("Semantic error: Identifier has not been declared: " + assignment_identifier + " in scope: " + this.scope + "\n");
 			this.identifier.semanticType = SemanticType.ERROR_TYPE;
 		} else {
 			this.identifier.semanticType = this.symbolTableReference.getType(assignment_identifier, this.scope);
@@ -27,11 +26,20 @@ public class Statement extends SyntaxTreeNode{
 		this.expression.semanticType = this.getExpressionType();
 		
 		if (this.identifier.semanticType == SemanticType.ERROR_TYPE || this.expression.semanticType == SemanticType.ERROR_TYPE) {
+			
+			this.errorLog.append_content("Semantic error: identifier and expression must have same data type\n");
 			this.semanticType = SemanticType.ERROR_TYPE ;
+			
 		} else if (this.identifier.semanticType == SemanticType.INTEGER_TYPE && this.expression.semanticType == SemanticType.FLOAT_TYPE) {
+			
+			this.errorLog.append_content("Semantic error: identifier and expression must have same data type\n");
 			this.semanticType = SemanticType.ERROR_TYPE;
+			
 		} else if (this.identifier.semanticType == SemanticType.FLOAT_TYPE && this.expression.semanticType == SemanticType.INTEGER_TYPE) {
+			
+			this.errorLog.append_content("Semantic error: identifier and expression must have same data type\n");
 			this.semanticType = SemanticType.ERROR_TYPE;
+			
 		} else {
 			this.semanticType = SemanticType.VOID_TYPE;
 		}

@@ -16,9 +16,7 @@ public class VarList extends SyntaxTreeNode{
 			this.symbolTableReference.add(varListType, var_identifier, this.scope);
 			this.identifier.semanticType = this.symbolTableReference.getType(var_identifier, this.scope);
 		} else {
-			String errors = this.errorLog.getText();
-			this.errorLog.setText(errors + " Semantic error: variable already declared: " 
-			                             + var_identifier + 
+			this.errorLog.append_content("Semantic error: variable already declared: " + var_identifier + 
 			                             " in scope: " + (this.scope.equals("") ? "Global" : this.scope) + "\n");
 			
 			this.identifier.semanticType = SemanticType.ERROR_TYPE;
@@ -29,9 +27,9 @@ public class VarList extends SyntaxTreeNode{
 			this.nextVar.errorLog = this.errorLog;
 			this.nextVar.scope  = this.scope;
 			this.nextVar.semanticType = ((VarList)this.nextVar).getType(varListType);
-			this.semanticType = (!this.identifier.semanticType.equals(SemanticType.ERROR_TYPE) && !this.identifier.semanticType.equals(SemanticType.ERROR_TYPE))
-					          ? SemanticType.ERROR_TYPE
-					          : SemanticType.VOID_TYPE;
+			this.semanticType = (!this.identifier.semanticType.equals(SemanticType.ERROR_TYPE) && !this.nextVar.semanticType.equals(SemanticType.ERROR_TYPE))
+					          ? SemanticType.VOID_TYPE
+					          : SemanticType.ERROR_TYPE;
 		} else {
 			this.semanticType = this.identifier.semanticType;
 		}

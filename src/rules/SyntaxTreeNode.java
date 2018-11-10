@@ -1,7 +1,6 @@
 package rules;
 
-import javax.swing.JTextArea;
-
+import fileutils.FileManager;
 import symbol_table.SymbolTable;
 
 public class SyntaxTreeNode {
@@ -13,15 +12,12 @@ public class SyntaxTreeNode {
 	public String paramsPattern;
 	
 	public SymbolTable symbolTableReference;
-	public JTextArea errorLog;
+	public FileManager errorLog;
 	
 	public SyntaxTreeNode() {
 		this.semanticType = "";
 		this.scope = "";
 		this.paramsPattern = "";
-	}
-	
-	public void validateTypes() {
 	}
 	
 	public String getType() {

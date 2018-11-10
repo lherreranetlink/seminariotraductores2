@@ -20,10 +20,8 @@ public class Params extends SyntaxTreeNode{
 			this.symbolTableReference.add(data_type, param_identifier, this.scope);
 			this.identifier.semanticType = this.symbolTableReference.getType(param_identifier, this.scope);
 		} else {
-			String errors = this.errorLog.getText();
-			this.errorLog.setText(errors + " Semantic error: parameter already declared: " 
-			                             + param_identifier + 
-			                             " in scope: " + this.scope + "\n");
+			this.errorLog.append_content("Semantic error: parameter already declared: " + param_identifier + 
+                    					 " in scope: " + this.scope + "\n");
 			this.identifier.semanticType = SemanticType.ERROR_TYPE;
 		}
 		
