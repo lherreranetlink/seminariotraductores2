@@ -101,7 +101,7 @@ public class MainClass extends JFrame {
 		lblMessages.setBounds(37, 383, 155, 30);
 		contentPane.add(lblMessages);
 		
-		JLabel lblNewLabel = new JLabel("El compiLador del Roger");
+		JLabel lblNewLabel = new JLabel("Analizador Semántico");
 		lblNewLabel.setFont(new Font("UnYetgul", Font.BOLD, 25));
 		lblNewLabel.setBounds(143, 0, 343, 46);
 		contentPane.add(lblNewLabel);
@@ -111,7 +111,7 @@ public class MainClass extends JFrame {
 		contentPane.add(sp);
 		
 		JScrollPane sp_1 = new JScrollPane(txtLog);
-		sp_1.setBounds(47, 425, 518, 134);
+		sp_1.setBounds(35, 425, 530, 134);
 		contentPane.add(sp_1);
 	}
 	

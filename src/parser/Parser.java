@@ -104,7 +104,7 @@ public class Parser {
 		while (!this.finishParse) {
 			this.currentToken = this.lexAnalyxer.getNextToken();
 			
-			if (this.lexAnalyxer.error) {
+			if (this.lexAnalyxer.error || this.error) {
 				this.finishParse = true;
 				break;
 			}
@@ -132,8 +132,11 @@ public class Parser {
 		}
 		
 		this.lexAnalyxer.close_input_file();
-		this.semanticAnalyzer = new SemanticAnalyzer((Program) this.tokenStack.gettop(), this.errorLog);
-		this.semanticAnalyzer.analyzeInput();
+		
+		if (!this.error) {
+			this.semanticAnalyzer = new SemanticAnalyzer((Program) this.tokenStack.gettop(), this.errorLog);
+			this.semanticAnalyzer.analyzeInput();
+		}
 		
 	}
 	
@@ -576,7 +579,6 @@ public class Parser {
 	private void SyntaxError() {
 		this.errorLog.append_content("Syntax Error: Unexpected token: " + this.currentToken.value + "\n");
 		this.error = true;
-		this.finishParse = true;
 	}
 
 }
