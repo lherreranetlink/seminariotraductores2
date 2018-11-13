@@ -15,6 +15,7 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import java.awt.Font;
@@ -78,7 +79,10 @@ public class MainClass extends JFrame {
 						file_manager = new FileManager(selectedFile.getAbsolutePath());
 						showInput();
 						parser.parse();
+						file_manager.close();
+						error_log.close();
 						printErrors();
+						deleteLogFile();
 					}
 				} catch (IOException e1) {
 					e1.printStackTrace();
@@ -123,9 +127,21 @@ public class MainClass extends JFrame {
 	
 	private void printErrors() {
 		try {
+			this.error_log = new FileManager("error_log");
+			String inputContents = error_log.get_file_contents();
+			txtLog.setText(inputContents);
 			this.error_log.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	private void deleteLogFile() {
+		try{
+			File file = new File("error_log");
+			file.delete();
+		} catch(Exception e){
+    		e.printStackTrace();
+    	}
 	}
 }

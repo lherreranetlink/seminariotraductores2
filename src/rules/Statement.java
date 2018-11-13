@@ -27,17 +27,17 @@ public class Statement extends SyntaxTreeNode{
 		
 		if (this.identifier.semanticType == SemanticType.ERROR_TYPE || this.expression.semanticType == SemanticType.ERROR_TYPE) {
 			
-			this.errorLog.append_content("Semantic error: identifier and expression must have same data type\n");
+			this.errorLog.append_content("Semantic error: identifier: " + assignment_identifier + " and expression must have the same data type\n");
 			this.semanticType = SemanticType.ERROR_TYPE ;
 			
 		} else if (this.identifier.semanticType == SemanticType.INTEGER_TYPE && this.expression.semanticType == SemanticType.FLOAT_TYPE) {
 			
-			this.errorLog.append_content("Semantic error: identifier and expression must have same data type\n");
+			this.errorLog.append_content("Semantic error: identifier: " + assignment_identifier + " and expression must have the same data type\n");
 			this.semanticType = SemanticType.ERROR_TYPE;
 			
 		} else if (this.identifier.semanticType == SemanticType.FLOAT_TYPE && this.expression.semanticType == SemanticType.INTEGER_TYPE) {
 			
-			this.errorLog.append_content("Semantic error: identifier and expression must have same data type\n");
+			this.errorLog.append_content("Semantic error: identifier: " + assignment_identifier + " and expression must have the same data type\n");
 			this.semanticType = SemanticType.ERROR_TYPE;
 			
 		} else {

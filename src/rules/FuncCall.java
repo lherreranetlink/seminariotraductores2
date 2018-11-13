@@ -18,8 +18,7 @@ public class FuncCall extends SyntaxTreeNode {
 			this.identifier.semanticType = SemanticType.VOID_TYPE;
 		} else {
 			this.identifier.semanticType = SemanticType.ERROR_TYPE;
-			this.errorLog.append_content("Semantic error: function does not exist: " + func_identifier + 
-                    " in scope: " + this.scope + "\n");
+			this.errorLog.append_content("Semantic error: function " + func_identifier + " does not exist in scope: " + this.scope + "\n");
 		}
 		
 		this.paramsPattern = "";
@@ -38,7 +37,7 @@ public class FuncCall extends SyntaxTreeNode {
 			String paramsPatternDefinition = this.symbolTableReference.getScopeParamsPattern(func_identifier);
 			if (!this.paramsPattern.equals(paramsPatternDefinition)) {
 				this.errorLog.append_content("Semantic error: Arguments passed in: " + func_identifier + 
-                        " does not match with original definition in scope : " + this.scope + "\n");
+                        " do not match with original definition in scope : " + this.scope + "\n");
 			}
 		}
 		
