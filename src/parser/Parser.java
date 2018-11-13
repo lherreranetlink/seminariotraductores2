@@ -2,9 +2,6 @@ package parser;
 
 import java.io.IOException;
 
-import javax.swing.JOptionPane;
-import javax.swing.JTextArea;
-
 import fileutils.FileManager;
 import lex.Constants;
 import lex.Lex;
@@ -52,24 +49,27 @@ import rules.Term;
 import rules.Term_1;
 import rules.Term_2;
 import rules.VarList;
+import semantic.SemanticAnalyzer;
 
 public class Parser {
 	
 	private Lex lexAnalyxer;
-	private JTextArea errorLog;
+	private SemanticAnalyzer semanticAnalyzer;
+	FileManager errorLog;
 	private FileManager grammar_file_manager;
 	private Token currentToken;
 	private ParserTableCell[][] parserTable;
 	private RulesList rulesList;
 	private TokenStack tokenStack;
 	public boolean error;
+	public boolean finishParse;
 	
 	public static final int SHIFT = 0;
 	public static final int REDUCTION = 1;
 	public static final int GO_TO_STATE = 2;
 	public static final int ERROR = 3;
 	
-	public Parser(JTextArea errorLog) {
+	public Parser(FileManager errorLog) {
 		try {
 			this.errorLog = errorLog;
 			this.grammar_file_manager = new FileManager("grammar");
@@ -77,18 +77,20 @@ public class Parser {
 			this.rulesList = new RulesList();
 			this.tokenStack = new TokenStack();
 			this.error = false;
+			this.finishParse = false;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public Parser(String input_filename, JTextArea errorLog) throws IOException {
+	public Parser(String input_filename, FileManager errorLog) throws IOException {
 		this.errorLog = errorLog;
 		this.lexAnalyxer = new Lex(input_filename, this.errorLog);
 		this.grammar_file_manager = new FileManager("grammar");
 		this.rulesList = new RulesList();
 		this.tokenStack = new TokenStack();
 		this.error = false;
+		this.finishParse = false;
 	}
 	
 	public void parse() throws IOException {
@@ -96,15 +98,14 @@ public class Parser {
 		this.buildTransitionTable();
 		this.rulesList.insertInitialTransition();
 		
-		boolean finishParse = false;
 		this.tokenStack.initializeStack();
 		ParserTableCell currentState;
 		
-		while (!finishParse) {
+		while (!this.finishParse) {
 			this.currentToken = this.lexAnalyxer.getNextToken();
 			
 			if (this.lexAnalyxer.error) {
-				finishParse = true;
+				this.finishParse = true;
 				break;
 			}
 			
@@ -122,7 +123,7 @@ public class Parser {
 				this.lexAnalyxer.ungetToken(currentToken);
 				
 				if (this.tokenStack.gettop().stateToSee == RuleType.PROGRAM && this.currentToken.key == Constants.EOF_SIGN) 
-					finishParse = true;
+					this.finishParse = true;
 				
 				break;
 			case Parser.ERROR:
@@ -130,11 +131,10 @@ public class Parser {
 			}
 		}
 		
-		if (!this.lexAnalyxer.error && !this.error) {
-			JOptionPane.showMessageDialog(null, "Parsing finish succesfully");
-		}
-		
 		this.lexAnalyxer.close_input_file();
+		this.semanticAnalyzer = new SemanticAnalyzer((Program) this.tokenStack.gettop(), this.errorLog);
+		this.semanticAnalyzer.analyzeInput();
+		
 	}
 	
 	private void buildAndPushSyntaxTreeNode(int rule) {
@@ -326,6 +326,7 @@ public class Parser {
 			case RuleType.STATEMENT_6:
 				this.tokenStack.pop();
 				Statement_6 statement_6 = new Statement_6();
+				statement_6.funcCall = this.tokenStack.pop();
 				
 				statement_6.ruleType = RuleType.STATEMENT_6;
 				newNode = statement_6;
@@ -380,7 +381,7 @@ public class Parser {
 				break;
 			case RuleType.TERM_2:
 				Term_2 term_2 = new Term_2();
-		        term_2.integer = this.tokenStack.pop();
+		        term_2.constant = this.tokenStack.pop();
 
 		        term_2.ruleType = RuleType.TERM_2;
 		        newNode = term_2;
@@ -573,9 +574,9 @@ public class Parser {
 	}
 	
 	private void SyntaxError() {
-		String errors = this.errorLog.getText();
-		this.errorLog.setText(errors + " Syntax Error: Unexpected token: " + this.currentToken.value + "\n");
+		this.errorLog.append_content("Syntax Error: Unexpected token: " + this.currentToken.value + "\n");
 		this.error = true;
+		this.finishParse = true;
 	}
 
 }

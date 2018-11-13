@@ -2,20 +2,18 @@ package lex;
 
 import java.io.IOException;
 
-import javax.swing.JTextArea;
-
 import fileutils.FileManager;
 
 public class Lex {
 	
 	private FileManager file_manager;
-	private JTextArea errorLog;
+	private FileManager errorLog;
 	private int currentState;
 	private int buffpos;
 	private Token[] buffer;
 	public boolean error;
 
-	public Lex(String filename, JTextArea errorLog) throws IOException {
+	public Lex(String filename, FileManager errorLog) throws IOException {
 		this.errorLog = errorLog;
 		this.file_manager = new FileManager(filename);
 		this.buffpos = -1; 
@@ -23,7 +21,7 @@ public class Lex {
 		this.error = false;
 	}
 	
-	public Lex(JTextArea errorLog) {
+	public Lex(FileManager errorLog) {
 		this.errorLog = errorLog;
 		this.file_manager = new FileManager();
 		this.buffpos = -1;
@@ -57,7 +55,7 @@ public class Lex {
 					case States.INITIAL_STATE:
 						token += c;
 						if (Character.isDigit(c)) {
-							this.currentState = Constants.INTEGER;
+							this.currentState = Constants.INTEGER_NUMBER;
 							break;
 						}
 						if (Character.isLetter(c) || c == '_') {
@@ -116,8 +114,28 @@ public class Lex {
 						continueLoop = false;
 						this.file_manager.ungetchar(c);
 						break;
-					case Constants.INTEGER:
+					case States.BEGIN_REAL_NUMBER_STATE:
 						if (Character.isDigit(c)) {
+							token += c;
+							this.currentState = Constants.REAL_NUMBER;
+							break;
+						}
+						continueLoop = false;
+						break;
+					case Constants.REAL_NUMBER:
+						if (Character.isDigit(c)) {
+							token += c;
+							break;
+						}
+						this.file_manager.ungetchar(c);
+						continueLoop = false;
+						break;
+					case Constants.INTEGER_NUMBER:
+						if (c == '.') {
+							token += c;
+							this.currentState = States.BEGIN_REAL_NUMBER_STATE;
+							break;
+						}else if (Character.isDigit(c)) {
 							token += c;
 							break;
 						}
@@ -150,8 +168,11 @@ public class Lex {
 			
 			newToken = new Token(this.currentState, token);
 			
-			if (this.currentState == Constants.IDENTIFIER) 
+			if (this.currentState == Constants.IDENTIFIER) {
 				this.comprobeAndSetKeyWord(newToken);
+			} else if (this.currentState == Constants.INTEGER_NUMBER || this.currentState == Constants.REAL_NUMBER) {
+				this.setNumericTokenAsConstant(newToken);
+			}
 			
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -244,20 +265,22 @@ public class Lex {
 		}
 	}
 	
-	private void setErrorIfExists()
-	{
-	    switch(this.currentState)
-	    {
+	private void setErrorIfExists() {
+	    switch(this.currentState) {
+	    case States.BEGIN_REAL_NUMBER_STATE:
 	    case States.BEGIN_LOGIC_AND_STATE:
 	    case States.BEGIN_LOGIC_OR_STATE:
 	        this.currentState= States.ERROR_STATE;
 	    }
 	}
 	
-	public void lexicalError(String invalidSymbol)
-	{
-		String errors = this.errorLog.getText();
-		this.errorLog.setText(errors + "Lexical Error: " + invalidSymbol + " invalid token\n");
+	private void setNumericTokenAsConstant(Token token) {
+		token.extraAttr = token.key;
+		token.key = Constants.CONSTANT;
+	}
+	
+	public void lexicalError(String invalidSymbol) {
+		this.errorLog.append_content("Lexical Error: " + invalidSymbol + " invalid token\n");
 		this.error = true;
 	}
 	

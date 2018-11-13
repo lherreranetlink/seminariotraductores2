@@ -27,7 +27,7 @@ public class MainClass extends JFrame {
 	private JFrame parent = this;
 	private JLabel lblFileSelected;
 	JTextArea txtInput, txtLog;
-	private FileManager file_manager;
+	private FileManager file_manager, error_log;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -73,10 +73,15 @@ public class MainClass extends JFrame {
 					if (result == JFileChooser.APPROVE_OPTION) {
 						File selectedFile = fileChooser.getSelectedFile();
 						lblFileSelected.setText(selectedFile.getAbsolutePath());
-						Parser parser = new Parser(selectedFile.getAbsolutePath(), txtLog);
+						error_log = new FileManager("error_log", true);
+						Parser parser = new Parser(selectedFile.getAbsolutePath(), error_log);
 						file_manager = new FileManager(selectedFile.getAbsolutePath());
 						showInput();
 						parser.parse();
+						file_manager.close();
+						error_log.close();
+						printErrors();
+						deleteLogFile();
 					}
 				} catch (IOException e1) {
 					e1.printStackTrace();
@@ -117,5 +122,25 @@ public class MainClass extends JFrame {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	private void printErrors() {
+		try {
+			this.error_log = new FileManager("error_log");
+			String inputContents = error_log.get_file_contents();
+			txtLog.setText(inputContents);
+			this.error_log.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void deleteLogFile() {
+		try{
+			File file = new File("error_log");
+			file.delete();
+		} catch(Exception e){
+    		e.printStackTrace();
+    	}
 	}
 }
