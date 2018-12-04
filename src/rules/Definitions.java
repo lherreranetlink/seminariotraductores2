@@ -17,7 +17,6 @@ public class Definitions extends SyntaxTreeNode{
 		this.definition.semanticType = this.getDefinitionType();
 		
 		this.scope = "";
-		this.symbolTableReference.printSymbolTable();
 		
 		if (moreDefinitions.ruleType != RuleType.EPSILON_RULE) {
 			this.moreDefinitions.symbolTableReference = this.symbolTableReference;
@@ -41,6 +40,24 @@ public class Definitions extends SyntaxTreeNode{
 				return ((Definition) this.definition).getType();
 			case RuleType.DEFINITION_1:
 				return ((Definition_1) this.definition).getType();
+		}
+		return null;
+	}
+	
+	public String generateAsm() {
+		String code = this.getDefinitionAsm();
+		if (this.moreDefinitions.ruleType != RuleType.EPSILON_RULE) {
+			code += ((Definitions)this.moreDefinitions).generateAsm();
+		}
+		return code;
+	}
+	
+	private String getDefinitionAsm() {
+		switch(this.definition.ruleType){
+			case RuleType.DEFINITION:
+				return ((Definition) this.definition).generateAsm();
+			case RuleType.DEFINITION_1:
+				return ((Definition_1) this.definition).generateAsm();
 		}
 		return null;
 	}

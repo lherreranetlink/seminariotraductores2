@@ -50,4 +50,21 @@ public class DefFunc extends SyntaxTreeNode{
     	
     	return this.semanticType;
 	}
+	
+	public String generateAsm() {
+		String code = "";
+		String blockCode = "";
+		String func_identifier = ((SimpleToken) identifier).token.value;
+		code += "\n" + func_identifier + " proc";
+		
+		if (params.ruleType != RuleType.EPSILON_RULE) {
+			code += ((Params) this.params).generateAsm();
+		}
+		
+		blockCode += ((FuncBlock) this.blockFunc).generateAsm();
+		
+		code += "\n" + blockCode + "\nret\n" + func_identifier + " endp\n";
+		
+		return code;
+	}
 }

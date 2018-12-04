@@ -36,4 +36,26 @@ public class VarList extends SyntaxTreeNode{
 		
 		return this.semanticType;
 	}
+	
+	public String generateAsm(String varListType) {
+		String dataTypeCode = "";
+		String varCode = "";
+		String code = "";
+		String var_identifier = ((SimpleToken) identifier).token.value;
+	
+		if (varListType.equals("int")) {
+			dataTypeCode += (this.scope.equals("")) ? " DWORD 0 " : ": DWORD ";
+		} else {
+			dataTypeCode += (this.scope.equals("")) ? " real4 0.0 " : ": real4 ";
+		}
+		
+		varCode += var_identifier + dataTypeCode;
+		code += this.scope.equals("") ? varCode + "\n" : "local " + varCode + "\n";
+		
+		if (this.nextVar.ruleType != RuleType.EPSILON_RULE) {
+			code += ((VarList) this.nextVar).generateAsm(varListType);
+		}
+		
+		return code;
+	}
 }

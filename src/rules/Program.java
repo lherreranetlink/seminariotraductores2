@@ -21,4 +21,12 @@ public class Program extends SyntaxTreeNode {
 		
 		return this.semanticType;
 	}
+	
+	public String generateAsm() {
+		if (this.definitions.ruleType != RuleType.EPSILON_RULE) {
+			return ((Definitions) this.definitions).generateAsm();
+		} else {
+			return "";
+		}
+	}
 }

@@ -1,3 +1,8 @@
+/asm_generator/
+/fileutils/
+/lex/
+/mainpackage/
+/parser/
 /rules/
 /semantic/
 /symbol_table/

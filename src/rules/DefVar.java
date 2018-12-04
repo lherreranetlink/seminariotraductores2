@@ -1,5 +1,6 @@
 package rules;
 
+import asm_generator.AsmGenerator;
 import parser.RuleType;
 import semantic.SemanticType;
 
@@ -38,5 +39,33 @@ public class DefVar extends SyntaxTreeNode{
 		}
 		
 		return this.semanticType;
+	}
+	
+	public String generateAsm() {
+		String dataTypeCode = "";
+		String varCode = "";
+		String code = "";
+		String data_type = ((SimpleToken) dataType).token.value;
+		String var_identifier = ((SimpleToken) identifier).token.value;
+	
+		if (data_type.equals("int")) {
+			dataTypeCode += (this.scope.equals("")) ? " DWORD 0 " : ": DWORD ";
+		} else {
+			dataTypeCode += (this.scope.equals("")) ? " real4 0.0 " : ": real4 ";
+		}
+		
+		varCode += var_identifier + dataTypeCode;
+		code += this.scope.equals("") ? varCode + "\n" : "local " + varCode + "\n";
+		
+		if (this.varList.ruleType != RuleType.EPSILON_RULE) {
+			code += ((VarList) this.varList).generateAsm(data_type);
+		}
+		
+		if (this.scope.equals("")) {
+			AsmGenerator.globalVars += code;
+			code = "";
+		}
+		
+		return code;
 	}
 }

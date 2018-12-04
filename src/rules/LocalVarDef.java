@@ -14,4 +14,8 @@ public class LocalVarDef extends SyntaxTreeNode{
 		
 		return this.semanticType;
 	}
+	
+	public String generateAsm() {
+		return ((DefVar) this.defVar).generateAsm();
+	}
 }

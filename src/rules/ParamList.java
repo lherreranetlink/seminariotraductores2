@@ -40,4 +40,17 @@ public class ParamList extends SyntaxTreeNode{
 		
 		return this.semanticType;
 	}
+	
+	public String generateAsm() {
+		String code = "";
+		String data_type = ((SimpleToken) dataType).token.value;
+		String param_identifier = ((SimpleToken) identifier).token.value;
+		code += data_type.equals("int") ?  param_identifier + ": DWORD" : param_identifier + ": real4"; 
+		
+		if (this.paramList.ruleType != RuleType.EPSILON_RULE) {
+			code += "," + ((ParamList) paramList).generateAsm();
+		}
+		
+		return code;
+	}
 }

@@ -20,8 +20,6 @@ public class Expression_8 extends SyntaxTreeNode {
 		
 		this.expressionLeft.semanticType = this.getExpressionType(this.expressionLeft);
 		this.expressionRight.semanticType = this.getExpressionType(this.expressionRight);
-		System.out.println("Expression left: " + this.expressionLeft.semanticType);
-		System.out.println("Expression right: " + this.expressionRight.semanticType);
 		
 		if (this.expressionLeft.semanticType == SemanticType.ERROR_TYPE || this.expressionRight.semanticType == SemanticType.ERROR_TYPE) {
 			this.semanticType = SemanticType.ERROR_TYPE;

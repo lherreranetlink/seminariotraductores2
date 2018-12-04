@@ -21,4 +21,8 @@ public class FuncBlock extends SyntaxTreeNode{
 		
 		return this.semanticType;
 	}
+	
+	public String generateAsm() {
+		return ((LocalVarsDef) this.localVarsDef).generateAsm();
+	}
 }

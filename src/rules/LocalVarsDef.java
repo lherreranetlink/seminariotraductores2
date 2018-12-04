@@ -41,4 +41,19 @@ public class LocalVarsDef extends SyntaxTreeNode{
 		
 		return null;
 	}
+	
+	public String generateAsm() {
+		return this.generateLocalDefinitionAsm();
+	}
+	
+	private String generateLocalDefinitionAsm() {
+		switch(this.localVarDef.ruleType) {
+			case RuleType.LOCAL_VAR_DEF:
+				return ((LocalVarDef) this.localVarDef).generateAsm();
+			case RuleType.LOCAL_VAR_DEF_1:
+				return ((LocalVarDef_1) this.localVarDef).generateAsm();
+		}
+	
+		return null;
+	}
 }

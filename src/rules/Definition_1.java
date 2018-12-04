@@ -14,4 +14,8 @@ public class Definition_1 extends SyntaxTreeNode{
 		
 		return this.semanticType;
 	}
+	
+	public String generateAsm() {
+		return ((DefFunc) this.defFunc).generateAsm();
+	}
 }

@@ -23,4 +23,8 @@ public class SyntaxTreeNode {
 	public String getType() {
 		return null;
 	}
+	
+	public String generateAsm() {
+		return null;
+	}
 }
